@@ -2,99 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TICC | War Room</title>
+    <title>INFERNO | WAR ROOM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Outfit:wght@900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0D0D0D; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
-        .nav-container { text-align: center; margin-bottom: 20px; }
-        .nav-btn { text-decoration: none; color: #FF8C00; padding: 10px 20px; border: 1px solid #FF8C00; margin: 0 5px; border-radius: 4px; font-weight: bold; }
+        :root { --orange: #FF4500; --glow: rgba(255, 69, 0, 0.6); }
+        body { background: #050505; color: #EEE; font-family: 'Rajdhani', sans-serif; margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; position: relative; }
         
-        .war-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; max-width: 1200px; margin: auto; }
-        .card { background: #1A1A1A; border: 1px solid #333; padding: 20px; border-radius: 8px; border-top: 4px solid #FF4500; }
+        /* Smoke Animation */
+        .smoke-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2; }
+        .smoke { position: absolute; width: 200%; height: 200%; background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); filter: blur(50px); animation: drift 60s linear infinite; }
+        @keyframes drift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Top Nav */
+        .top-nav { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid var(--orange); padding: 15px; display: flex; justify-content: center; gap: 20px; position: sticky; top: 0; z-index: 100; }
+        .nav-link { color: #888; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8em; transition: 0.3s; text-transform: uppercase; }
+        .nav-link:hover { color: var(--orange); }
         
-        /* Chain Timer Styles */
-        #chain-timer { font-size: 3em; color: #FF4500; font-family: monospace; text-align: center; margin: 10px 0; }
-        
-        /* Status List Styles */
-        .member-status { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #222; }
-        .hosp { color: #ff4444; font-weight: bold; }
-        .jail { color: #ffa500; font-weight: bold; }
-        .okay { color: #00ff00; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 20px; display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+        h1 { grid-column: 1 / -1; font-family: 'Outfit', sans-serif; font-weight: 900; color: var(--orange); text-align: center; font-size: 3.5em; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 0 20px var(--glow); letter-spacing: 5px; }
+
+        /* Tactical Cards */
+        .card { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255, 69, 0, 0.3); border-radius: 12px; padding: 25px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        h2 { font-family: 'Orbitron', sans-serif; color: var(--orange); margin-top: 0; font-size: 1.2em; border-bottom: 1px solid #333; padding-bottom: 10px; letter-spacing: 2px; }
+
+        /* Chain Timer Display */
+        #timer { font-size: 5em; font-family: 'Orbitron', sans-serif; text-align: center; color: var(--orange); margin: 20px 0; text-shadow: 0 0 20px var(--glow); }
+        #hits { text-align: center; font-size: 1.8em; color: #FFF; font-family: 'Orbitron', sans-serif; }
+
+        /* Roster List */
+        .member-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 1.1em; }
+        .status-okay { color: #00FF00; font-weight: bold; }
+        .status-hosp { color: #FF4444; font-weight: bold; }
+        .status-jail { color: #FFA500; font-weight: bold; }
     </style>
 </head>
-<body id="secret-content" style="display:none;">
-
-<div class="nav-container">
-    <a href="index.html" class="nav-btn">Dashboard</a>
-    <a href="stats.html" class="nav-btn">Stats</a>
-</div>
-
-<h1 style="color:#FF4500; text-align:center;">COMBAT INTELLIGENCE</h1>
-
-<div class="war-grid">
-    <div class="card">
-        <h2>Live Chain</h2>
-        <div id="chain-timer">00:00</div>
-        <p style="text-align:center; color:#888;">Time remaining until chain drops</p>
-        <div id="chain-count" style="font-size:1.5em; text-align:center; color:#FF8C00;">Hits: 0</div>
-    </div>
-
-    <div class="card">
-        <h2>Faction Roster Status</h2>
-        <div id="status-list">Scanning roster...</div>
-    </div>
-</div>
-
-<script>
-    // 1. THE GATEKEEPER (PASSWORD)
-    const PASSCODE = "INFERNO2026"; // Change this to your faction secret!
-    let entry = prompt("Enter Inferno Command Code:");
+<body>
+    <div class="smoke-container"><div class="smoke"></div></div>
     
-    if (entry === PASSCODE) {
-        document.getElementById('secret-content').style.display = 'block';
-    } else {
-        alert("ACCESS DENIED");
-        window.location.href = "index.html";
-    }
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link">Main Hub</a>
+        <a href="stats.html" class="nav-link">Intelligence</a>
+        <a href="tools.html" class="nav-link">Utilities</a>
+    </nav>
 
-    // 2. LIVE INTEL SCRIPT
-    const API_KEY = 'YOUR_API_KEY';
-    const FAC_ID = 'YOUR_FACTION_ID';
+    <div class="container">
+        <h1>War Room</h1>
 
-    async function updateWarRoom() {
-        const url = `https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`;
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
+        <div class="card">
+            <h2>CHAIN STATUS</h2>
+            <div id="timer">--:--</div>
+            <div id="hits">HITS: 0</div>
+        </div>
 
-            // Update Chain Stats
-            const timerSeconds = data.chain.timeout;
-            const minutes = Math.floor(timerSeconds / 60);
-            const seconds = timerSeconds % 60;
-            document.getElementById('chain-timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            document.getElementById('chain-count').innerText = `Hits: ${data.chain.current}`;
+        <div class="card">
+            <h2>ROSTER STATUS</h2>
+            <div id="roster">Initializing scan...</div>
+        </div>
+    </div>
 
-            // Update Member Statuses
-            let statusHtml = "";
-            const members = Object.values(data.members);
-            members.forEach(m => {
-                let statusClass = "okay";
-                let statusText = m.status.description;
+    <script>
+        const API_KEY = '8dOfVkNSWgShB27'; // Your confirmed key
+        const FAC_ID = '51373'; // Your confirmed ID
 
-                if (statusText.includes("Hospital")) statusClass = "hosp";
-                if (statusText.includes("Jail")) statusClass = "jail";
+        async function updateWarRoom() {
+            try {
+                const res = await fetch(`https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`);
+                const data = await res.json();
+                
+                // Update Chain
+                const timeout = data.chain.timeout;
+                const minutes = Math.floor(timeout / 60);
+                const seconds = (timeout % 60).toString().padStart(2, '0');
+                const timerEl = document.getElementById('timer');
+                
+                timerEl.innerText = `${minutes}:${seconds}`;
+                document.getElementById('hits').innerText = `HITS: ${data.chain.current}`;
 
-                statusHtml += `<div class="member-status">
-                    <span>${m.name}</span>
-                    <span class="${statusClass}">${statusText}</span>
-                </div>`;
-            });
-            document.getElementById('status-list').innerHTML = statusHtml;
+                if (timeout < 60) timerEl.style.color = "#FF0000";
+                else timerEl.style.color = "var(--orange)";
 
-        } catch (e) { console.error("Blackout:", e); }
-    }
+                // Update Member Status
+                let rosterHtml = "";
+                Object.values(data.members).sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
+                    let statusClass = "status-okay";
+                    if (m.status.description.includes("Hospital")) statusClass = "status-hosp";
+                    if (m.status.description.includes("Jail")) statusClass = "status-jail";
 
-    setInterval(updateWarRoom, 15000); // Update every 15 seconds
-    updateWarRoom();
-</script>
+                    rosterHtml += `
+                        <div class="member-row">
+                            <span>${m.name}</span>
+                            <span class="${statusClass}">${m.status.description}</span>
+                        </div>
+                    `;
+                });
+                document.getElementById('roster').innerHTML = rosterHtml;
+
+            } catch (e) { console.error("Comms Offline", e); }
+        }
+
+        updateWarRoom();
+        setInterval(updateWarRoom, 15000); // 15-second refresh
+    </script>
 </body>
 </html>
