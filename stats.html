@@ -1,24 +1,111 @@
-<nav style="margin-top: 20px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TICC | Intelligence Stats</title>
+    <style>
+        body { background-color: #0D0D0D; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        h1 { color: #FF4500; text-align: center; letter-spacing: 2px; }
+        
+        /* Navigation Buttons */
+        .nav-container { text-align: center; margin-bottom: 30px; }
+        .nav-btn { text-decoration: none; color: #FF8C00; padding: 10px 20px; border: 1px solid #FF8C00; margin: 0 5px; border-radius: 4px; font-weight: bold; }
+        .nav-btn:hover { background: #FF4500; color: white; }
+
+        /* Tables */
+        .stats-table { width: 100%; max-width: 900px; margin: 20px auto; border-collapse: collapse; background: #1A1A1A; border-radius: 8px; overflow: hidden; }
+        .stats-table th, .stats-table td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        .stats-table th { background-color: #000; color: #FF4500; text-transform: uppercase; font-size: 0.8em; }
+        .clickable-name { color: #FF8C00; cursor: pointer; text-decoration: underline; }
+        .clickable-name:hover { color: #FF4500; }
+
+        /* History Section */
+        #history-section { max-width: 900px; margin: 40px auto; padding: 20px; border: 1px solid #FF4500; border-radius: 8px; display: none; }
+        .gain-positive { color: #00FF00; }
+    </style>
+</head>
+<body>
+
+<div class="nav-container">
     <a href="index.html" class="nav-btn">Dashboard</a>
     <a href="war-room.html" class="nav-btn">War Room</a>
-    <a href="stats.html" class="nav-btn">Leaderboard</a>
-    <a href="recruitment.html" class="nav-btn">Join Us</a>
-</nav>
+    <a href="stats.html" class="nav-btn" style="background:#FF4500; color:white;">Leaderboard</a>
+</div>
 
-<style>
-    .nav-btn {
-        text-decoration: none;
-        color: #E0E0E0; /* Smoke */
-        padding: 10px 20px;
-        margin: 0 5px;
-        background: #1A1A1A;
-        border: 1px solid #FF8C00; /* Embers */
-        border-radius: 4px;
-        font-weight: bold;
-        transition: 0.3s;
+<h1>MEMBER INTELLIGENCE</h1>
+
+<table class="stats-table" id="leaderboard">
+    <thead>
+        <tr>
+            <th>Member</th>
+            <th>Total Stats</th>
+            <th>Xanax Taken</th>
+            <th>7-Day Gain</th>
+        </tr>
+    </thead>
+    <tbody>
+        </tbody>
+</table>
+
+<div id="history-section">
+    <h2 id="history-title" style="color:#FF4500;">Member History</h2>
+    <div id="history-content">Select a name above to view historical logs.</div>
+</div>
+
+<script>
+    const CSV_URL = 'PASTE_YOUR_CSV_LINK_HERE';
+
+    async function loadStats() {
+        const response = await fetch(CSV_URL);
+        const csvData = await response.text();
+        const rows = csvData.split('\n').map(row => row.split(','));
+        const headers = rows[0];
+        const data = rows.slice(1);
+
+        // Filter for the most recent entry for each member to show in the main table
+        const latestStats = {}; 
+        data.forEach(row => {
+            if(row[1]) latestStats[row[1]] = row; // Map by Member Name
+        });
+
+        const tableBody = document.querySelector('#leaderboard tbody');
+        tableBody.innerHTML = '';
+
+        Object.values(latestStats).forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="clickable-name" onclick="showHistory('${row[1]}')">${row[1]}</td>
+                <td>${Number(row[3]).toLocaleString()}</td>
+                <td>${row[4]}</td>
+                <td class="gain-positive">+${Number(row[5]).toLocaleString()}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+
+        // Store full data globally for the history function
+        window.fullFactionData = data;
     }
-    .nav-btn:hover {
-        background: #FF4500; /* Inferno Orange */
-        color: white;
+
+    function showHistory(name) {
+        const historySection = document.getElementById('history-section');
+        const historyContent = document.getElementById('history-content');
+        document.getElementById('history-title').innerText = `${name} - Progress History`;
+        
+        const memberLogs = window.fullFactionData.filter(row => row[1] === name);
+        
+        let html = '<table style="width:100%; margin-top:10px;"><tr><th>Date</th><th>Gain</th></tr>';
+        memberLogs.reverse().forEach(log => {
+            html += `<tr><td>${log[0]}</td><td class="gain-positive">+${log[5]}</td></tr>`;
+        });
+        html += '</table>';
+        
+        historyContent.innerHTML = html;
+        historySection.style.display = 'block';
+        historySection.scrollIntoView({ behavior: 'smooth' });
     }
-</style>
+
+    loadStats();
+</script>
+
+</body>
+</html>
