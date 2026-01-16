@@ -18,8 +18,8 @@
         .stats-table { width: 100%; border-collapse: collapse; background: rgba(20,20,20,0.8); backdrop-filter: blur(15px); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
         .stats-table th { background: #000; color: var(--orange); font-family: 'Orbitron', sans-serif; font-size: 0.75em; padding: 20px; text-align: left; border-bottom: 1px solid var(--orange); }
         .stats-table td { padding: 18px; border-bottom: 1px solid #222; font-size: 1.1em; }
-        .name-link { color: var(--orange); font-weight: bold; text-decoration: none; transition: 0.3s; }
-        .name-link:hover { border-bottom: 1px solid var(--orange); }
+        .name-link { color: var(--orange); font-weight: bold; text-decoration: none; }
+        .status-tag { font-size: 0.8em; padding: 4px 8px; border-radius: 4px; margin-left: 10px; background: rgba(255,69,0,0.1); color: var(--orange); border: 1px solid var(--orange); }
     </style>
 </head>
 <body>
@@ -27,7 +27,6 @@
     <nav class="top-nav">
         <a href="index.html" class="nav-link">Main Hub</a>
         <a href="war-room.html" class="nav-link">War Room</a>
-        <a href="tools.html" class="nav-link">Utilities</a>
     </nav>
     <div class="container">
         <h1>Intelligence</h1>
@@ -41,47 +40,54 @@
                 </tr>
             </thead>
             <tbody>
-                <tr><td colspan="4" style="text-align:center;">Initializing Inferno Brain...</td></tr>
+                <tr><td colspan="4" style="text-align:center;">Connecting to Inferno Brain...</td></tr>
             </tbody>
         </table>
     </div>
     <script>
         const API_KEY = '8dOfVkNSWgShB27'; 
         const FAC_ID = '51373';
-        // UPDATED CSV LINK FROM YOUR SCREENSHOT
+        // Using the direct CSV export link confirmed in your screenshot
         const BRAIN_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnplVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?gid=0&single=true&output=csv';
 
         async function loadData() {
+            let sheetData = [];
+            
+            // Step 1: Try to get the Google Sheet data
             try {
-                // Fetch both live roster and sheet stats
-                const [tornRes, sheetRes] = await Promise.all([
-                    fetch(`https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`),
-                    fetch(BRAIN_CSV)
-                ]);
-                const tornData = await tornRes.json();
+                const sheetRes = await fetch(BRAIN_CSV);
                 const sheetText = await sheetRes.text();
+                sheetData = sheetText.split('\n').map(r => r.split(','));
+            } catch (e) {
+                console.warn("Brain CSV Connection Failed. Using Live Roster Only.");
+            }
+
+            // Step 2: Get the Live Roster from Torn
+            try {
+                const tornRes = await fetch(`https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`);
+                const tornData = await tornRes.json();
                 
-                // Parse CSV rows
-                const sheetRows = sheetText.split('\n').map(r => r.split(','));
                 const tbody = document.querySelector('#memberTable tbody');
                 tbody.innerHTML = '';
                 
+                if (!tornData.members) throw new Error("API Key Rejected");
+
                 Object.values(tornData.members).sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
-                    // Match member ID in Column C (index 2)
-                    const statsEntry = sheetRows.slice().reverse().find(r => r[2] && r[2].trim() == m.id) || ["", "", m.id, "Pending"];
+                    // Match ID in Column C (index 2) of the CSV
+                    const statsEntry = sheetData.slice().reverse().find(r => r[2] && r[2].trim() == m.id);
+                    const displayStats = statsEntry ? Number(statsEntry[3]).toLocaleString() : "Syncing...";
                     
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td><a href="member-detail.html?id=${m.id}" class="name-link">${m.name}</a></td>
                         <td>${m.last_action.relative}</td>
                         <td>${m.position}</td>
-                        <td style="color:var(--orange); font-weight:bold;">${statsEntry[3]}</td>
+                        <td style="color:var(--orange); font-weight:bold;">${displayStats}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             } catch (e) { 
-                console.error("Sync Error", e); 
-                document.querySelector('#memberTable tbody').innerHTML = '<tr><td colspan="4" style="text-align:center;">OFFLINE: Check GitHub Link or CSV Publish Status</td></tr>';
+                document.querySelector('#memberTable tbody').innerHTML = '<tr><td colspan="4" style="text-align:center;">CRITICAL ERROR: CHECK TORN API KEY</td></tr>';
             }
         }
         loadData();
