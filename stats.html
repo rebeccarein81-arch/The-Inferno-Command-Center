@@ -1,48 +1,37 @@
 <script>
-    // Link to your 'History' tab CSV
+    // THE SECRET: Point this ONLY to the History tab CSV link
     const BRAIN_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnplVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?gid=0&single=true&output=csv';
 
     async function loadData() {
         try {
             const response = await fetch(BRAIN_CSV);
             const text = await response.text();
-            
-            // Convert CSV text into rows
             const rows = text.split('\n').map(r => r.split(','));
             
             const tbody = document.querySelector('#memberTable tbody');
             tbody.innerHTML = '';
 
-            // We only want the LATEST entry for each member
             const latestEntries = {};
-            
-            // Skip header row and process
+            // Skip the header row (index 0)
             rows.slice(1).forEach(row => {
-                if(row[2]) { // Ensure Member ID exists
-                    const memberID = row[2].trim();
-                    latestEntries[memberID] = row; 
+                if(row[2]) {
+                    // Logic: Overwrites older entries with the newest one found
+                    latestEntries[row[2].trim()] = row; 
                 }
             });
 
-            // Loop through our unique members and build the table
             Object.values(latestEntries).forEach(entry => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><a href="member-detail.html?id=${entry[2]}" class="name-link">${entry[1]}</a></td>
+                    <td style="font-weight:bold; color:#FF4500;">${entry[1]}</td>
                     <td>Recorded: ${entry[0]}</td>
                     <td>Member</td>
                     <td style="color:#FF4500; font-weight:bold;">${Number(entry[3]).toLocaleString()}</td>
                 `;
                 tbody.appendChild(tr);
             });
-            
-            if (Object.keys(latestEntries).length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No data found. Click "Archive Stats" in your Sheet first!</td></tr>';
-            }
-
         } catch (e) {
-            console.error("Sheet Connection Error", e);
-            document.querySelector('#memberTable tbody').innerHTML = '<tr><td colspan="4" style="text-align:center;">OFFLINE: Check CSV Link</td></tr>';
+            console.error("Load Failed", e);
         }
     }
     loadData();
