@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TICC | Utilities</title>
+    <style>
+        body { background-color: #0D0D0D; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .nav-container { text-align: center; margin-bottom: 30px; }
+        .nav-btn { text-decoration: none; color: #FF8C00; padding: 10px 20px; border: 1px solid #FF8C00; margin: 0 5px; border-radius: 4px; font-weight: bold; }
+        .nav-btn:hover { background: #FF4500; color: white; }
+        
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1000px; margin: auto; }
+        .card { background: #1A1A1A; border: 1px solid #333; padding: 20px; border-radius: 8px; border-top: 4px solid #FF8C00; }
+        h1 { color: #FF4500; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #444; color: #0f0; }
+    </style>
+</head>
+<body>
+
+<div class="nav-container">
+    <a href="index.html" class="nav-btn">Dashboard</a>
+    <a href="war-room.html" class="nav-btn">War Room</a>
+    <a href="stats.html" class="nav-btn">Stats</a>
+</div>
+
+<h1>FACTION UTILITIES</h1>
+
+<div class="tool-grid">
+    <div class="card">
+        <h2>Profit Calculator</h2>
+        <p>Item Cost (Torn):</p>
+        <input type="number" id="cost" placeholder="e.g. 800000">
+        <p>Expected Sale Price:</p>
+        <input type="number" id="sale" placeholder="e.g. 830000">
+        <div id="profit-result" style="color:#0f0; font-weight:bold; margin-top:10px;">Profit: $0</div>
+    </div>
+</div>
+
+<script>
+    // Quick profit calculation logic
+    const costInput = document.getElementById('cost');
+    const saleInput = document.getElementById('sale');
+    const resultDiv = document.getElementById('profit-result');
+
+    function calc() {
+        const profit = saleInput.value - costInput.value;
+        resultDiv.innerText = `Profit: $${profit.toLocaleString()}`;
+    }
+
+    costInput.oninput = calc;
+    saleInput.oninput = calc;
+</script>
+
+</body>
+</html>
