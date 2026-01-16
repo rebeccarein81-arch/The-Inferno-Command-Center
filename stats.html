@@ -6,81 +6,82 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Outfit:wght@900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --orange: #FF4500; --glow: rgba(255, 69, 0, 0.6); }
-        body { background: #050505; color: #EEE; font-family: 'Rajdhani', sans-serif; margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; position: relative; }
+        body { background: #050505; color: #EEE; font-family: 'Rajdhani', sans-serif; margin: 0; padding: 0; min-height: 100vh; position: relative; }
         .smoke-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2; }
         .smoke { position: absolute; width: 200%; height: 200%; background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); filter: blur(50px); animation: drift 60s linear infinite; }
         @keyframes drift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .top-nav { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid var(--orange); padding: 15px; display: flex; justify-content: center; gap: 20px; position: sticky; top: 0; z-index: 100; }
-        .nav-link { color: #888; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8em; transition: 0.3s; }
+        .nav-link { color: #888; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8em; transition: 0.3s; text-transform: uppercase; }
         .nav-link:hover { color: var(--orange); }
-        .container { max-width: 1100px; margin: 40px auto; padding: 20px; position: relative; }
-        h1 { font-family: 'Outfit', sans-serif; font-weight: 900; color: var(--orange); text-align: center; letter-spacing: 4px; text-shadow: 0 0 20px var(--glow); font-size: 3.5em; text-transform: uppercase; }
-        .search-bar { width: 100%; max-width: 400px; display: block; margin: 20px auto; padding: 12px; background: rgba(0,0,0,0.6); border: 1px solid var(--orange); color: white; border-radius: 25px; text-align: center; font-family: 'Orbitron', sans-serif; outline: none; }
-        .stats-table { width: 100%; border-collapse: collapse; background: rgba(20,20,20,0.8); backdrop-filter: blur(15px); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .container { max-width: 1100px; margin: 40px auto; padding: 20px; }
+        h1 { font-family: 'Outfit', sans-serif; font-weight: 900; color: var(--orange); text-align: center; letter-spacing: 4px; text-shadow: 0 0 20px var(--glow); font-size: 3.5em; text-transform: uppercase; margin-bottom: 40px; }
+        .stats-table { width: 100%; border-collapse: collapse; background: rgba(20,20,20,0.8); backdrop-filter: blur(15px); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
         .stats-table th { background: #000; color: var(--orange); font-family: 'Orbitron', sans-serif; font-size: 0.75em; padding: 20px; text-align: left; border-bottom: 1px solid var(--orange); }
-        .stats-table td { padding: 18px; border-bottom: 1px solid #222; font-size: 1.2em; }
-        .stats-table tr:hover { background: rgba(255,69,0,0.1); }
-        .name-link { color: var(--orange); font-weight: bold; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .stats-table td { padding: 18px; border-bottom: 1px solid #222; font-size: 1.1em; }
+        .name-link { color: var(--orange); font-weight: bold; text-decoration: none; transition: 0.3s; }
         .name-link:hover { border-bottom: 1px solid var(--orange); }
     </style>
 </head>
 <body>
     <div class="smoke-container"><div class="smoke"></div></div>
     <nav class="top-nav">
-        <a href="index.html" class="nav-link">MAIN HUB</a>
-        <a href="war-room.html" class="nav-link">WAR ROOM</a>
-        <a href="tools.html" class="nav-link">UTILITIES</a>
+        <a href="index.html" class="nav-link">Main Hub</a>
+        <a href="war-room.html" class="nav-link">War Room</a>
+        <a href="tools.html" class="nav-link">Utilities</a>
     </nav>
     <div class="container">
-        <h1>INTELLIGENCE</h1>
-        <input type="text" class="search-bar" id="memberSearch" placeholder="SEARCH ROSTER..." onkeyup="filterTable()">
+        <h1>Intelligence</h1>
         <table class="stats-table" id="memberTable">
             <thead>
                 <tr>
-                    <th>MEMBER</th>
-                    <th>LAST ACTION</th>
-                    <th>ROLE</th>
-                    <th>BATTLE STATS</th>
+                    <th>Member</th>
+                    <th>Last Action</th>
+                    <th>Role</th>
+                    <th>Battle Stats</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+                <tr><td colspan="4" style="text-align:center;">Initializing Inferno Brain...</td></tr>
+            </tbody>
         </table>
     </div>
     <script>
         const API_KEY = '8dOfVkNSWgShB27'; 
         const FAC_ID = '51373';
+        // UPDATED CSV LINK FROM YOUR SCREENSHOT
         const BRAIN_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnplVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?gid=0&single=true&output=csv';
 
         async function loadData() {
             try {
+                // Fetch both live roster and sheet stats
                 const [tornRes, sheetRes] = await Promise.all([
                     fetch(`https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`),
                     fetch(BRAIN_CSV)
                 ]);
                 const tornData = await tornRes.json();
                 const sheetText = await sheetRes.text();
+                
+                // Parse CSV rows
                 const sheetRows = sheetText.split('\n').map(r => r.split(','));
                 const tbody = document.querySelector('#memberTable tbody');
                 tbody.innerHTML = '';
+                
                 Object.values(tornData.members).sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
-                    const statsEntry = sheetRows.reverse().find(r => r[2] == m.id) || ["", "", m.id, "0"];
+                    // Match member ID in Column C (index 2)
+                    const statsEntry = sheetRows.slice().reverse().find(r => r[2] && r[2].trim() == m.id) || ["", "", m.id, "Pending"];
+                    
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td><a href="member-detail.html?id=${m.id}" class="name-link">${m.name}</a></td>
                         <td>${m.last_action.relative}</td>
                         <td>${m.position}</td>
-                        <td style="color:var(--orange); font-weight:bold;">${Number(statsEntry[3]).toLocaleString()}</td>
+                        <td style="color:var(--orange); font-weight:bold;">${statsEntry[3]}</td>
                     `;
                     tbody.appendChild(tr);
                 });
-            } catch (e) { console.error("Data Error", e); }
-        }
-        function filterTable() {
-            let filter = document.getElementById("memberSearch").value.toUpperCase();
-            let rows = document.getElementById("memberTable").getElementsByTagName("tr");
-            for (let i = 1; i < rows.length; i++) {
-                let name = rows[i].getElementsByTagName("td")[0].innerText;
-                rows[i].style.display = name.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            } catch (e) { 
+                console.error("Sync Error", e); 
+                document.querySelector('#memberTable tbody').innerHTML = '<tr><td colspan="4" style="text-align:center;">OFFLINE: Check GitHub Link or CSV Publish Status</td></tr>';
             }
         }
         loadData();
