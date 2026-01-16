@@ -1,42 +1,59 @@
-// --- THE BRAIN OF THE INFERNO HQ ---
+// --- THE BLACK INFERNO: COMMAND CENTER LOGIC ---
 
+// 1. THE IGNITE FUNCTION (Login)
 function ignite() {
     const key = document.getElementById('apiKey').value;
     const errorMsg = document.getElementById('error-msg');
 
-    // 1. Basic Validation: Torn keys are always 16 characters
     if (key.length === 16) {
-        // 2. Save the key in the user's browser memory
         localStorage.setItem('inferno_api_key', key);
         
-        // 3. Hide login, show dashboard
+        // Visual Transition
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'grid';
         
-        // 4. Start fetching the member's data
-        fetchMemberData(key);
+        // Fetch User Identity
+        updateUserIdentity(key);
     } else {
-        // Show error if the key is wrong length
         if (errorMsg) errorMsg.style.display = 'block';
     }
 }
 
-// This function welcomes the user by their Torn Name
-async function fetchMemberData(key) {
+// 2. IDENTITY CHECK (Who is logging in?)
+async function updateUserIdentity(key) {
     try {
         const response = await fetch(`https://api.torn.com/user/?selections=profile&key=${key}`);
         const data = await response.json();
 
         if (data.name) {
             document.getElementById('display-name').innerText = data.name;
-            console.log("Authenticated as: " + data.name);
+            console.log("Welcome back, " + data.name);
         }
     } catch (err) {
-        console.error("Connection to Torn API failed.", err);
+        console.error("API Connection Failed", err);
     }
 }
 
-// Auto-login check when page loads
+// 3. NAVIGATION (Switching Tabs)
+function showSection(sectionId) {
+    // Select the main briefing cards and the intelligence view
+    const mainBriefing = document.querySelector('.stats-grid');
+    const intelView = document.getElementById('intelligence-section');
+
+    if (sectionId === 'intelligence') {
+        mainBriefing.style.display = 'none';
+        intelView.style.display = 'block';
+    } else {
+        mainBriefing.style.display = 'grid';
+        intelView.style.display = 'none';
+    }
+
+    // Update the Sidebar 'Active' Look
+    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    // This logic assumes you add IDs to your sidebar links (e.g., id="nav-dash")
+}
+
+// 4. AUTO-LOGIN ON LOAD
 window.onload = () => {
     const savedKey = localStorage.getItem('inferno_api_key');
     if (savedKey) {
