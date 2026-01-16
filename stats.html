@@ -2,159 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFERNO | INTELLIGENCE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Outfit:wght@900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Outfit:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --orange: #FF4500; 
-            --glow: rgba(255, 69, 0, 0.6); 
-            --bg-dark: #050505;
-        }
-
-        body { 
-            background-color: var(--bg-dark); 
-            color: #EEE; 
-            font-family: 'Rajdhani', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            min-height: 100vh; 
-            overflow-x: hidden; 
-            position: relative; 
-        }
-
-        /* Tactical Smoke Animation */
-        .smoke-wrap {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: var(--bg-dark);
-        }
-
-        .smoke-particle {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(40, 40, 40, 0.4) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.5;
-            animation: drift-smoke var(--duration) ease-in-out infinite;
-        }
-
-        @keyframes drift-smoke {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-            50% { transform: translate(100px, -50px) scale(1.2); opacity: 0.6; }
-            100% { transform: translate(-50px, 20px) scale(1); opacity: 0.3; }
-        }
-
-        /* Navigation */
-        .top-nav { 
-            background: rgba(255, 255, 255, 0.05); 
-            backdrop-filter: blur(10px); 
-            border-bottom: 1px solid var(--orange); 
-            padding: 15px; 
-            display: flex; 
-            justify-content: center; 
-            gap: 20px; 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-        }
-
-        .nav-link { 
-            color: #888; 
-            text-decoration: none; 
-            font-family: 'Orbitron', sans-serif; 
-            font-size: 0.8em; 
-            transition: 0.3s; 
-            text-transform: uppercase; 
-        }
-
-        .nav-link:hover { color: var(--orange); }
-
-        /* Container & Table */
-        .container { 
-            max-width: 1100px; 
-            margin: 40px auto; 
-            padding: 20px; 
-        }
-
-        h1 { 
-            font-family: 'Outfit', sans-serif; 
-            font-weight: 900; 
-            color: var(--orange); 
-            text-align: center; 
-            letter-spacing: 4px; 
-            text-shadow: 0 0 20px var(--glow); 
-            font-size: 3.5em; 
-            text-transform: uppercase; 
-            margin-bottom: 40px; 
-        }
-
-        .stats-table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            background: rgba(20, 20, 20, 0.85); 
-            backdrop-filter: blur(15px); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            border: 1px solid rgba(255, 69, 0, 0.2); 
-        }
-
-        .stats-table th { 
-            background: #000; 
-            color: var(--orange); 
-            font-family: 'Orbitron', sans-serif; 
-            font-size: 0.75em; 
-            padding: 20px; 
-            text-align: left; 
-            border-bottom: 1px solid var(--orange); 
-        }
-
-        .stats-table td { 
-            padding: 18px; 
-            border-bottom: 1px solid #222; 
-            font-size: 1.1em; 
-        }
-
-        .status-active { color: #00FF00; font-size: 0.8em; text-transform: uppercase; }
+        body { background: #050505; color: #EEE; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        h1 { font-family: 'Outfit', sans-serif; color: #FF4500; text-transform: uppercase; letter-spacing: 4px; }
+        .nav { margin-bottom: 30px; }
+        .nav a { color: #888; text-decoration: none; margin: 0 15px; font-family: 'Orbitron', sans-serif; font-size: 0.8em; }
+        table { width: 100%; max-width: 900px; margin: 0 auto; border-collapse: collapse; background: #111; border: 1px solid #FF4500; }
+        th { background: #000; color: #FF4500; padding: 15px; border-bottom: 2px solid #FF4500; }
+        td { padding: 12px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
-    <div class="smoke-wrap">
-        <div class="smoke-particle" style="top: -10%; left: -10%; --duration: 25s;"></div>
-        <div class="smoke-particle" style="bottom: -20%; left: 20%; --duration: 30s;"></div>
+
+    <div class="nav">
+        <a href="index.html">HUB</a>
+        <a href="war-room.html">WAR ROOM</a>
     </div>
 
-    <nav class="top-nav">
-        <a href="index.html" class="nav-link">Main Hub</a>
-        <a href="war-room.html" class="nav-link">War Room</a>
-        <a href="tools.html" class="nav-link">Utilities</a>
-    </nav>
+    <h1>Intelligence</h1>
 
-    <div class="container">
-        <h1>Intelligence</h1>
-        <table class="stats-table" id="statsTable">
-            <thead>
-                <tr>
-                    <th>Member</th>
-                    <th>Date Recorded</th>
-                    <th>Status</th>
-                    <th>Battle Stats</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td colspan="4" style="text-align:center;">Syncing with Inferno Brain...</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <table id="statsTable">
+        <thead>
+            <tr>
+                <th>Member</th>
+                <th>Date</th>
+                <th>Stats</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="3">Loading...</td></tr>
+        </tbody>
+    </table>
 
     <script>
-        // Your specific History tab CSV link
+        // EXACT link from your last message
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnplVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?gid=722061266&single=true&output=csv';
 
         async function loadData() {
@@ -162,43 +45,27 @@
                 const response = await fetch(CSV_URL);
                 const text = await response.text();
                 
-                // Safety check for empty data
-                if (!text || text.length < 5) throw new Error("Sheet Empty");
-
-                const rows = text.split('\n').map(r => r.split(','));
+                // Split text into lines, then lines into columns
+                const rows = text.split('\n');
                 const tbody = document.querySelector('#statsTable tbody');
                 tbody.innerHTML = '';
 
-                // Filtering for the latest entry per Member ID
-                const latestEntries = {};
-                rows.slice(1).forEach(row => {
-                    if(row[2] && row[2].trim() !== "") {
-                        latestEntries[row[2].trim()] = row; 
+                // Processing rows (skipping header)
+                for (let i = 1; i < rows.length; i++) {
+                    const cols = rows[i].split(',');
+                    if (cols.length >= 3) {
+                        const tr = document.createElement('tr');
+                        // Column A: Date, B: Name, D: Stats
+                        tr.innerHTML = `
+                            <td style="color:#FF4500; font-weight:bold;">${cols[1]}</td>
+                            <td>${cols[0]}</td>
+                            <td style="font-weight:bold;">${cols[3] || '0'}</td>
+                        `;
+                        tbody.appendChild(tr);
                     }
-                });
-
-                const members = Object.values(latestEntries);
-                
-                if (members.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No history found. Click "Archive Stats" in Google Sheets.</td></tr>';
-                    return;
                 }
-
-                members.forEach(entry => {
-                    const tr = document.createElement('tr');
-                    // Mapping: A=Date, B=Name, C=ID, D=Stats
-                    tr.innerHTML = `
-                        <td style="font-weight:bold; color:var(--orange);">${entry[1] || 'Unknown'}</td>
-                        <td>${entry[0] || '---'}</td>
-                        <td><span class="status-active">Verified</span></td>
-                        <td style="color:var(--orange); font-weight:bold;">${entry[3] ? Number(entry[3]).toLocaleString() : '0'}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
             } catch (e) {
-                console.error("Sync Error:", e);
-                document.querySelector('#statsTable tbody').innerHTML = '<tr><td colspan="4" style="text-align:center;">OFFLINE: Data not found in History tab.</td></tr>';
+                document.querySelector('#statsTable tbody').innerHTML = '<tr><td colspan="3">Error: Check CSV Publish Settings</td></tr>';
             }
         }
         loadData();
