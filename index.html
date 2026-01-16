@@ -142,6 +142,41 @@
     // Initial pull and auto-refresh every 30 seconds
     updateDashboard();
     setInterval(updateDashboard, 30000);
+    async function loadLeaderboard() {
+    // Replace the link below with your "Publish to Web" CSV link from Google Sheets
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnpIVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?output=csv';
+
+    try {
+        const response = await fetch(csvUrl);
+        const data = await response.text();
+        const rows = data.split('\n').slice(1); // Skip the header row
+        
+        let tableHtml = '<table style="width:100%; border-collapse: collapse;">';
+        tableHtml += '<tr style="border-bottom: 1px solid #444; color: #888;"><th>Member</th><th>7-Day Gain</th></tr>';
+
+        rows.forEach(row => {
+            const columns = row.split(',');
+            if (columns.length >= 6) {
+                const name = columns[1];
+                const gain = columns[5]; // Assuming "Weekly Gain" is Column F
+                tableHtml += `<tr style="border-bottom: 1px solid #222;">
+                                <td style="padding: 10px 0;">${name}</td>
+                                <td style="color: #FF8C00; font-weight: bold;">+${gain}</td>
+                              </tr>`;
+            }
+        });
+
+        tableHtml += '</table>';
+        document.getElementById('leaderboard').innerHTML = tableHtml;
+
+    } catch (error) {
+        document.getElementById('leaderboard').innerHTML = "Brain synchronization failed.";
+        console.error("Leaderboard error:", error);
+    }
+}
+
+// Add this line at the very bottom of your script to make it run
+loadLeaderboard();
 </script>
 </body>
 </html>
