@@ -2,179 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TICC | Intelligence Stats</title>
+    <title>INFERNO | INTELLIGENCE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body
-        <nav class="top-nav">
-    <div class="nav-links">
-        <a href="index.html" class="nav-item">MAIN HUB</a>
-        <a href="stats.html" class="nav-item">INTELLIGENCE</a>
-        <a href="war-room.html" class="nav-item">WAR ROOM</a>
-        <a href="tools.html" class="nav-item">UTILITIES</a>
-    </div>
-</nav>
-
-<style>
-    .top-nav {
-        background: #1A1A1A;
-        border-bottom: 2px solid #FF4500;
-        padding: 15px 0;
-        margin-bottom: 30px;
-        width: 100%;
-    }
-    .nav-links {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
-    .nav-item {
-        text-decoration: none;
-        color: #888;
-        font-weight: bold;
-        font-size: 0.85em;
-        letter-spacing: 1px;
-        padding: 8px 15px;
-        border-radius: 4px;
-        transition: 0.3s;
-    }
-    .nav-item:hover {
-        color: #FF4500;
-        background: #0D0D0D;
-    }
-    /* This makes the link look active if you're on that page */
-    .nav-item:active {
-        color: #FFF;
-        border: 1px solid #FF4500;
-    }
-</style>
+        body { background: #050505; color: #EEE; font-family: 'Rajdhani', sans-serif; margin: 0; padding: 0; }
+        .top-nav { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid #FF4500; padding: 15px; display: flex; justify-content: center; gap: 20px; }
+        .nav-link { color: #888; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8em; transition: 0.3s; }
+        .nav-link:hover { color: #FF4500; }
         
-        { background-color: #0D0D0D; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
-        h1 { color: #FF4500; text-align: center; letter-spacing: 2px; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 20px; }
+        h1 { font-family: 'Orbitron', sans-serif; color: #FF4500; text-align: center; letter-spacing: 4px; }
         
-        .nav-container { text-align: center; margin-bottom: 30px; }
-        .nav-btn { text-decoration: none; color: #FF8C00; padding: 10px 20px; border: 1px solid #FF8C00; margin: 0 5px; border-radius: 4px; font-weight: bold; }
-        .nav-btn:hover { background: #FF4500; color: white; }
-
-        /* Search Bar Styling */
-        .search-container { text-align: center; margin-bottom: 20px; }
-        #memberSearch { 
-            width: 80%; 
-            max-width: 400px; 
-            padding: 12px; 
-            background: #1A1A1A; 
-            border: 1px solid #FF4500; 
-            color: white; 
-            border-radius: 20px; 
-            outline: none;
-        }
-
-        .stats-table { width: 100%; max-width: 900px; margin: 20px auto; border-collapse: collapse; background: #1A1A1A; border-radius: 8px; overflow: hidden; }
-        .stats-table th, .stats-table td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
-        .stats-table th { background-color: #000; color: #FF4500; font-size: 0.8em; }
-        .clickable-name { color: #FF8C00; cursor: pointer; text-decoration: underline; }
-
-        #history-section { max-width: 900px; margin: 40px auto; padding: 20px; border: 1px solid #FF4500; border-radius: 8px; display: none; }
-        .gain-positive { color: #00FF00; }
+        .stats-table { width: 100%; border-collapse: collapse; background: rgba(20,20,20,0.8); border-radius: 10px; overflow: hidden; }
+        .stats-table th { background: #000; color: #FF4500; font-family: 'Orbitron', sans-serif; font-size: 0.75em; padding: 15px; text-align: left; }
+        .stats-table td { padding: 15px; border-bottom: 1px solid #222; }
+        .stats-table tr:hover { background: rgba(255,69,0,0.05); }
+        
+        .name-link { color: #FF8C00; font-weight: bold; text-decoration: none; }
+        .name-link:hover { text-decoration: underline; color: #FF4500; }
+        
+        .search-bar { width: 100%; max-width: 400px; display: block; margin: 20px auto; padding: 10px; background: #111; border: 1px solid #FF4500; color: white; border-radius: 20px; text-align: center; }
     </style>
 </head>
 <body>
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link">MAIN HUB</a>
+        <a href="war-room.html" class="nav-link">WAR ROOM</a>
+        <a href="tools.html" class="nav-link">UTILITIES</a>
+    </nav>
 
-<div class="nav-container">
-    <a href="index.html" class="nav-btn">Dashboard</a>
-    <a href="war-room.html" class="nav-btn">War Room</a>
-    <a href="stats.html" class="nav-btn" style="background:#FF4500; color:white;">Leaderboard</a>
-</div>
+    <div class="container">
+        <h1>MEMBER INTELLIGENCE</h1>
+        <input type="text" class="search-bar" id="memberSearch" placeholder="SEARCH ROSTER..." onkeyup="filterTable()">
+        
+        <table class="stats-table" id="memberTable">
+            <thead>
+                <tr>
+                    <th>MEMBER</th>
+                    <th>LAST ACTION</th>
+                    <th>ROLE</th>
+                    <th>TOTAL BATTLE STATS</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
 
-<h1>MEMBER INTELLIGENCE</h1>
+    <script>
+        const API_KEY = 'YOUR_API_KEY';
+        const FAC_ID = 'YOUR_FACTION_ID';
+        const BRAIN_CSV = 'YOUR_BRAIN_CSV_URL';
 
-<div class="search-container">
-    <input type="text" id="memberSearch" placeholder="Search for a member..." onkeyup="filterTable()">
-</div>
+        async function loadData() {
+            const [tornRes, sheetRes] = await Promise.all([
+                fetch(`https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`),
+                fetch(BRAIN_CSV)
+            ]);
 
-<table class="stats-table" id="leaderboard">
-    <thead>
-        <tr>
-            <th>Member</th>
-            <th>Total Stats</th>
-            <th>Xanax Taken</th>
-            <th>7-Day Gain</th>
-        </tr>
-    </thead>
-    <tbody>
-        </tbody>
-</table>
+            const tornData = await tornRes.json();
+            const sheetText = await sheetRes.text();
+            const sheetRows = sheetText.split('\n').map(r => r.split(','));
 
-<div id="history-section">
-    <h2 id="history-title" style="color:#FF4500;">Member History</h2>
-    <div id="history-content">Select a name above to view historical logs.</div>
-</div>
+            const tbody = document.querySelector('#memberTable tbody');
+            tbody.innerHTML = '';
 
-<script>
-    const CSV_URL = 'PASTE_YOUR_CSV_LINK_HERE'; // Use your CSV Link here
+            Object.values(tornData.members).forEach(m => {
+                // Find latest stat entry in Google Sheet by Member ID
+                const statsEntry = sheetRows.reverse().find(r => r[2] == m.id) || [0,0,0,"0"];
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><a href="member-detail.html?id=${m.id}" class="name-link">${m.name}</a></td>
+                    <td>${m.last_action.relative}</td>
+                    <td>${m.position}</td>
+                    <td style="color:#FF4500; font-weight:bold;">${Number(statsEntry[3]).toLocaleString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-    async function loadStats() {
-        const response = await fetch(CSV_URL);
-        const csvData = await response.text();
-        const rows = csvData.split('\n').map(row => row.split(','));
-        const data = rows.slice(1);
-
-        const latestStats = {}; 
-        data.forEach(row => {
-            if(row[1]) latestStats[row[1]] = row; 
-        });
-
-        const tableBody = document.querySelector('#leaderboard tbody');
-        tableBody.innerHTML = '';
-
-        Object.values(latestStats).forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="clickable-name" onclick="showHistory('${row[1]}')">${row[1]}</td>
-                <td>${Number(row[3]).toLocaleString()}</td>
-                <td>${row[4]}</td>
-                <td class="gain-positive">+${Number(row[5]).toLocaleString()}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
-
-        window.fullFactionData = data;
-    }
-
-    // Filter Logic
-    function filterTable() {
-        let input = document.getElementById("memberSearch");
-        let filter = input.value.toUpperCase();
-        let table = document.getElementById("leaderboard");
-        let tr = table.getElementsByTagName("tr");
-
-        for (let i = 1; i < tr.length; i++) {
-            let td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                let txtValue = td.textContent || td.innerText;
-                tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+        function filterTable() {
+            let filter = document.getElementById("memberSearch").value.toUpperCase();
+            let rows = document.getElementById("memberTable").getElementsByTagName("tr");
+            for (let i = 1; i < rows.length; i++) {
+                let name = rows[i].getElementsByTagName("td")[0].innerText;
+                rows[i].style.display = name.toUpperCase().indexOf(filter) > -1 ? "" : "none";
             }
         }
-    }
 
-    function showHistory(name) {
-        const historySection = document.getElementById('history-section');
-        const historyContent = document.getElementById('history-content');
-        document.getElementById('history-title').innerText = `${name} - Progress History`;
-        const memberLogs = window.fullFactionData.filter(row => row[1] === name);
-        
-        let html = '<table style="width:100%; margin-top:10px;"><tr><th>Date</th><th>Gain</th></tr>';
-        memberLogs.reverse().forEach(log => {
-            html += `<tr><td>${log[0]}</td><td class="gain-positive">+${log[5]}</td></tr>`;
-        });
-        html += '</table>';
-        
-        historyContent.innerHTML = html;
-        historySection.style.display = 'block';
-        historySection.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    loadStats();
-</script>
-
+        loadData();
+    </script>
 </body>
 </html>
