@@ -5,6 +5,48 @@
     <title>TICC | HUB</title>
     <style>
         body { 
+            <nav class="top-nav">
+    <div class="nav-links">
+        <a href="index.html" class="nav-item">MAIN HUB</a>
+        <a href="stats.html" class="nav-item">INTELLIGENCE</a>
+        <a href="war-room.html" class="nav-item">WAR ROOM</a>
+        <a href="tools.html" class="nav-item">UTILITIES</a>
+    </div>
+</nav>
+
+<style>
+    .top-nav {
+        background: #1A1A1A;
+        border-bottom: 2px solid #FF4500;
+        padding: 15px 0;
+        margin-bottom: 30px;
+        width: 100%;
+    }
+    .nav-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    .nav-item {
+        text-decoration: none;
+        color: #888;
+        font-weight: bold;
+        font-size: 0.85em;
+        letter-spacing: 1px;
+        padding: 8px 15px;
+        border-radius: 4px;
+        transition: 0.3s;
+    }
+    .nav-item:hover {
+        color: #FF4500;
+        background: #0D0D0D;
+    }
+    /* This makes the link look active if you're on that page */
+    .nav-item:active {
+        color: #FFF;
+        border: 1px solid #FF4500;
+    }
+</style>
             background-color: #0D0D0D; 
             color: #E0E0E0; 
             font-family: 'Segoe UI', sans-serif; 
