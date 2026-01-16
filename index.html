@@ -2,132 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TICC | HUB</title>
+    <title>INFERNO | COMMAND</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            <nav class="top-nav">
-    <div class="nav-links">
-        <a href="index.html" class="nav-item">MAIN HUB</a>
-        <a href="stats.html" class="nav-item">INTELLIGENCE</a>
-        <a href="war-room.html" class="nav-item">WAR ROOM</a>
-        <a href="tools.html" class="nav-item">UTILITIES</a>
-    </div>
-</nav>
-
-<style>
-    .top-nav {
-        background: #1A1A1A;
-        border-bottom: 2px solid #FF4500;
-        padding: 15px 0;
-        margin-bottom: 30px;
-        width: 100%;
-    }
-    .nav-links {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
-    .nav-item {
-        text-decoration: none;
-        color: #888;
-        font-weight: bold;
-        font-size: 0.85em;
-        letter-spacing: 1px;
-        padding: 8px 15px;
-        border-radius: 4px;
-        transition: 0.3s;
-    }
-    .nav-item:hover {
-        color: #FF4500;
-        background: #0D0D0D;
-    }
-    /* This makes the link look active if you're on that page */
-    .nav-item:active {
-        color: #FFF;
-        border: 1px solid #FF4500;
-    }
-</style>
-            background-color: #0D0D0D; 
-            color: #E0E0E0; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh;
-        }
-        
-        header { text-align: center; margin-bottom: 40px; }
-        h1 { color: #FF4500; letter-spacing: 8px; font-size: 3.5em; margin: 0; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5); }
-        .tagline { color: #888; text-transform: uppercase; letter-spacing: 4px; font-size: 0.9em; margin-top: 10px; }
-
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            width: 90%;
-            max-width: 1000px;
-        }
-
-        .nav-card {
-            background: #1A1A1A;
-            border: 1px solid #333;
-            padding: 50px 20px;
-            text-align: center;
-            text-decoration: none;
-            color: #FF8C00;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border-bottom: 5px solid #FF4500;
-        }
-
-        .nav-card:hover {
-            background: #222;
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.4);
-            border-color: #FF4500;
-        }
-
-        .nav-card h2 { margin: 0; font-size: 1.5em; letter-spacing: 1px; }
-        .nav-card p { color: #666; font-size: 0.85em; margin-top: 15px; font-weight: normal; text-transform: uppercase; }
-        .nav-card:hover p { color: #E0E0E0; }
-
-        /* Status Indicator */
-        .system-status { margin-top: 40px; font-size: 0.7em; color: #444; letter-spacing: 2px; }
+        :root { --orange: #FF4500; --glow: rgba(255, 69, 0, 0.4); --glass: rgba(20, 20, 20, 0.85); }
+        body { background: radial-gradient(circle at center, #1a0a00 0%, #000 100%); color: #e0e0e0; font-family: 'Rajdhani', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        h1 { font-family: 'Orbitron', sans-serif; color: var(--orange); letter-spacing: 12px; font-size: 4em; margin-bottom: 50px; text-shadow: 0 0 20px var(--glow); }
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 90%; max-width: 1100px; }
+        .nav-card { background: var(--glass); border: 1px solid rgba(255,69,0,0.2); padding: 60px 20px; text-align: center; text-decoration: none; color: white; border-radius: 15px; backdrop-filter: blur(10px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .nav-card::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transition: 0.5s; }
+        .nav-card:hover::before { left: 100%; }
+        .nav-card:hover { transform: translateY(-10px); border-color: var(--orange); box-shadow: 0 0 40px var(--glow); }
+        .nav-card h2 { font-family: 'Orbitron', sans-serif; margin: 0; color: var(--orange); letter-spacing: 2px; }
+        .nav-card p { color: #888; margin-top: 15px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>INFERNO</h1>
-        <div class="tagline">Command Center Alpha</div>
-    </header>
-
+    <h1>INFERNO</h1>
     <div class="nav-grid">
-        <a href="stats.html" class="nav-card">
-            <h2>INTELLIGENCE</h2>
-            <p>Member Stats & 7-Day Growth</p>
-        </a>
-
-        <a href="war-room.html" class="nav-card">
-            <h2>WAR ROOM</h2>
-            <p>Live Combat & Status Tracker</p>
-        </a>
-
-        <a href="tools.html" class="nav-card">
-            <h2>UTILITIES</h2>
-            <p>Calculators & Tactical Tools</p>
-        </a>
-
-        <a href="#" class="nav-card" style="opacity: 0.5; cursor: not-allowed;">
-            <h2>ARCHIVES</h2>
-            <p>System Logs (Locked)</p>
-        </a>
+        <a href="stats.html" class="nav-card"><h2>INTELLIGENCE</h2><p>Member Growth & Leaderboards</p></a>
+        <a href="war-room.html" class="nav-card"><h2>WAR ROOM</h2><p>Live Combat & Status Tracker</p></a>
+        <a href="tools.html" class="nav-card"><h2>UTILITIES</h2><p>Tactical Calculators</p></a>
     </div>
-
-    <div class="system-status">SYSTEMS ONLINE // ENCRYPTION ACTIVE</div>
-
 </body>
 </html>
