@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TICC | War Room</title>
+    <style>
+        body { background-color: #0D0D0D; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .nav-container { text-align: center; margin-bottom: 20px; }
+        .nav-btn { text-decoration: none; color: #FF8C00; padding: 10px 20px; border: 1px solid #FF8C00; margin: 0 5px; border-radius: 4px; font-weight: bold; }
+        
+        .war-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; max-width: 1200px; margin: auto; }
+        .card { background: #1A1A1A; border: 1px solid #333; padding: 20px; border-radius: 8px; border-top: 4px solid #FF4500; }
+        
+        /* Chain Timer Styles */
+        #chain-timer { font-size: 3em; color: #FF4500; font-family: monospace; text-align: center; margin: 10px 0; }
+        
+        /* Status List Styles */
+        .member-status { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #222; }
+        .hosp { color: #ff4444; font-weight: bold; }
+        .jail { color: #ffa500; font-weight: bold; }
+        .okay { color: #00ff00; }
+    </style>
+</head>
+<body id="secret-content" style="display:none;">
+
+<div class="nav-container">
+    <a href="index.html" class="nav-btn">Dashboard</a>
+    <a href="stats.html" class="nav-btn">Stats</a>
+</div>
+
+<h1 style="color:#FF4500; text-align:center;">COMBAT INTELLIGENCE</h1>
+
+<div class="war-grid">
+    <div class="card">
+        <h2>Live Chain</h2>
+        <div id="chain-timer">00:00</div>
+        <p style="text-align:center; color:#888;">Time remaining until chain drops</p>
+        <div id="chain-count" style="font-size:1.5em; text-align:center; color:#FF8C00;">Hits: 0</div>
+    </div>
+
+    <div class="card">
+        <h2>Faction Roster Status</h2>
+        <div id="status-list">Scanning roster...</div>
+    </div>
+</div>
+
+<script>
+    // 1. THE GATEKEEPER (PASSWORD)
+    const PASSCODE = "INFERNO2026"; // Change this to your faction secret!
+    let entry = prompt("Enter Inferno Command Code:");
+    
+    if (entry === PASSCODE) {
+        document.getElementById('secret-content').style.display = 'block';
+    } else {
+        alert("ACCESS DENIED");
+        window.location.href = "index.html";
+    }
+
+    // 2. LIVE INTEL SCRIPT
+    const API_KEY = 'YOUR_API_KEY';
+    const FAC_ID = 'YOUR_FACTION_ID';
+
+    async function updateWarRoom() {
+        const url = `https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            // Update Chain Stats
+            const timerSeconds = data.chain.timeout;
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            document.getElementById('chain-timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            document.getElementById('chain-count').innerText = `Hits: ${data.chain.current}`;
+
+            // Update Member Statuses
+            let statusHtml = "";
+            const members = Object.values(data.members);
+            members.forEach(m => {
+                let statusClass = "okay";
+                let statusText = m.status.description;
+
+                if (statusText.includes("Hospital")) statusClass = "hosp";
+                if (statusText.includes("Jail")) statusClass = "jail";
+
+                statusHtml += `<div class="member-status">
+                    <span>${m.name}</span>
+                    <span class="${statusClass}">${statusText}</span>
+                </div>`;
+            });
+            document.getElementById('status-list').innerHTML = statusHtml;
+
+        } catch (e) { console.error("Blackout:", e); }
+    }
+
+    setInterval(updateWarRoom, 15000); // Update every 15 seconds
+    updateWarRoom();
+</script>
+</body>
+</html>
