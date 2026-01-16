@@ -4,67 +4,88 @@
     <meta charset="UTF-8">
     <title>TICC | HUB</title>
     <style>
-        body { background-color: #0D0D0D; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        body { 
+            background-color: #0D0D0D; 
+            color: #E0E0E0; 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh;
+        }
         
-        header { text-align: center; margin-bottom: 50px; }
-        h1 { color: #FF4500; letter-spacing: 8px; font-size: 3em; margin: 0; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5); }
-        p { color: #888; text-transform: uppercase; letter-spacing: 2px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: #FF4500; letter-spacing: 8px; font-size: 3.5em; margin: 0; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5); }
+        .tagline { color: #888; text-transform: uppercase; letter-spacing: 4px; font-size: 0.9em; margin-top: 10px; }
 
         .nav-grid {
             display: grid;
-            grid-template-columns: repeat(2, 250px);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
+            width: 90%;
+            max-width: 1000px;
         }
 
         .nav-card {
             background: #1A1A1A;
-            border: 2px solid #333;
-            padding: 40px 20px;
+            border: 1px solid #333;
+            padding: 50px 20px;
             text-align: center;
             text-decoration: none;
             color: #FF8C00;
             font-weight: bold;
             border-radius: 8px;
-            transition: 0.4s;
-            border-bottom: 4px solid #FF4500;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #FF4500;
         }
 
         .nav-card:hover {
-            background: #FF4500;
-            color: white;
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 69, 0, 0.3);
+            background: #222;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.4);
+            border-color: #FF4500;
         }
 
-        .nav-card span { display: block; font-size: 0.8em; color: #888; margin-top: 10px; font-weight: normal; }
-        .nav-card:hover span { color: white; }
+        .nav-card h2 { margin: 0; font-size: 1.5em; letter-spacing: 1px; }
+        .nav-card p { color: #666; font-size: 0.85em; margin-top: 15px; font-weight: normal; text-transform: uppercase; }
+        .nav-card:hover p { color: #E0E0E0; }
+
+        /* Status Indicator */
+        .system-status { margin-top: 40px; font-size: 0.7em; color: #444; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>INFERNO</h1>
-        <p>Command & Intelligence Hub</p>
+        <div class="tagline">Command Center Alpha</div>
     </header>
 
     <div class="nav-grid">
         <a href="stats.html" class="nav-card">
-            FACTION STATS
-            <span>7-Day Growth & Leaderboard</span>
+            <h2>INTELLIGENCE</h2>
+            <p>Member Stats & 7-Day Growth</p>
         </a>
+
         <a href="war-room.html" class="nav-card">
-            WAR ROOM
-            <span>Live Combat Intel (Restricted)</span>
+            <h2>WAR ROOM</h2>
+            <p>Live Combat & Status Tracker</p>
         </a>
-        <a href="recruitment.html" class="nav-card">
-            RECRUITMENT
-            <span>Standards & Applications</span>
-        </a>
+
         <a href="tools.html" class="nav-card">
-            UTILITIES
-            <span>API Tools & Calculators</span>
+            <h2>UTILITIES</h2>
+            <p>Calculators & Tactical Tools</p>
+        </a>
+
+        <a href="#" class="nav-card" style="opacity: 0.5; cursor: not-allowed;">
+            <h2>ARCHIVES</h2>
+            <p>System Logs (Locked)</p>
         </a>
     </div>
+
+    <div class="system-status">SYSTEMS ONLINE // ENCRYPTION ACTIVE</div>
 
 </body>
 </html>
