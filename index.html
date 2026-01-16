@@ -2,181 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>THE INFERNO COMMAND CENTER</title>
+    <title>TICC | HUB</title>
     <style>
-        /* TICC THEME: Obsidian, Smoke, and Inferno Orange */
-        body { 
-            background-color: #0D0D0D; 
-            color: #E0E0E0; 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            margin: 0; 
-            padding-bottom: 50px;
-        }
+        body { background-color: #0D0D0D; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
         
-        /* THE HEADER */
-        header { 
-            background: linear-gradient(180deg, #1A1A1A 0%, #0D0D0D 100%);
-            padding: 40px 20px; 
-            border-bottom: 3px solid #FF4500; 
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(255, 69, 0, 0.2);
-        }
-        h1 { color: #FF4500; letter-spacing: 5px; margin: 0; font-size: 2.5em; text-shadow: 2px 2px #000; }
-        .tagline { color: #FF8C00; font-size: 0.9em; margin-top: 10px; text-transform: uppercase; }
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { color: #FF4500; letter-spacing: 8px; font-size: 3em; margin: 0; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5); }
+        p { color: #888; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* THE GRID LAYOUT */
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 40px auto;
+        .nav-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            padding: 0 20px;
+            grid-template-columns: repeat(2, 250px);
+            gap: 20px;
         }
 
-        /* INTELLIGENCE CARDS */
-        .card { 
-            background: #1A1A1A; 
-            border: 1px solid #333; 
-            border-top: 4px solid #FF8C00; 
-            padding: 25px; 
-            border-radius: 4px;
-            transition: transform 0.2s;
-        }
-        .card:hover { transform: translateY(-5px); border-color: #FF4500; }
-        
-        h2 { color: #FF4500; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 1.2em; }
-        
-        /* STAT STYLING */
-        .stat-row { display: flex; justify-content: space-between; margin: 15px 0; font-size: 1.1em; }
-        .stat-label { color: #888; }
-        .stat-value { color: #FF4500; font-weight: bold; font-family: 'Courier New', monospace; }
-
-        /* THE WAR ROOM ALERT */
-        .war-status {
-            background-color: #2a0000;
-            border: 1px solid #FF4500;
-            color: #FF4500;
-            padding: 10px;
+        .nav-card {
+            background: #1A1A1A;
+            border: 2px solid #333;
+            padding: 40px 20px;
             text-align: center;
+            text-decoration: none;
+            color: #FF8C00;
             font-weight: bold;
-            border-radius: 4px;
-            margin-top: 20px;
+            border-radius: 8px;
+            transition: 0.4s;
+            border-bottom: 4px solid #FF4500;
         }
+
+        .nav-card:hover {
+            background: #FF4500;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.3);
+        }
+
+        .nav-card span { display: block; font-size: 0.8em; color: #888; margin-top: 10px; font-weight: normal; }
+        .nav-card:hover span { color: white; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>THE INFERNO COMMAND CENTER</h1>
-    <div class="tagline">Official Intelligence Hub for The Black Inferno</div>
-</header>
+    <header>
+        <h1>INFERNO</h1>
+        <p>Command & Intelligence Hub</p>
+    </header>
 
-<div class="dashboard-container">
-    
-    <div class="card">
-        <h2>Faction Vitals</h2>
-        <div class="stat-row">
-            <span class="stat-label">Total Respect:</span>
-            <span class="stat-value" id="respect">---</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">Active Chain:</span>
-            <span class="stat-value" id="chain">0</span>
-        </div>
-        <div class="war-status">STATUS: STANDBY</div>
+    <div class="nav-grid">
+        <a href="stats.html" class="nav-card">
+            FACTION STATS
+            <span>7-Day Growth & Leaderboard</span>
+        </a>
+        <a href="war-room.html" class="nav-card">
+            WAR ROOM
+            <span>Live Combat Intel (Restricted)</span>
+        </a>
+        <a href="recruitment.html" class="nav-card">
+            RECRUITMENT
+            <span>Standards & Applications</span>
+        </a>
+        <a href="tools.html" class="nav-card">
+            UTILITIES
+            <span>API Tools & Calculators</span>
+        </a>
     </div>
 
-    <div class="card">
-        <h2>7-Day Growth (The Brain)</h2>
-        <div id="leaderboard">
-            <p style="font-size: 0.8em; color: #666;">Synchronizing with Google Sheets...</p>
-            </div>
-    </div>
-
-    <div class="card">
-        <h2>Command Links</h2>
-        <div class="stat-row"><a href="https://www.torn.com" style="color: #FF8C00;">Torn City Main</a></div>
-        <div class="stat-row"><a href="https://www.tornstats.com" style="color: #FF8C00;">Torn Stats</a></div>
-    </div>
-
-</div>
-<script>
-    // COMMAND CONFIGURATION
-    const API_KEY = '8dOffVkNSWgShB27'; 
-    const FACTION_ID = '3788891';
-
-    async function updateDashboard() {
-        const url = `https://api.torn.com/faction/${FACTION_ID}?selections=basic&key=${API_KEY}`;
-        
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-
-            // 1. Update Respect
-            if (data.respect) {
-                document.getElementById('respect').innerText = data.respect.toLocaleString();
-            }
-
-            // 2. Update Chain & War Status
-            const chain = data.chain.current;
-            const statusBox = document.querySelector('.war-status');
-            
-            document.getElementById('chain').innerText = chain;
-
-            if (chain > 0) {
-                statusBox.innerText = `WAR ACTIVE: ${chain} HIT CHAIN`;
-                statusBox.style.backgroundColor = "#4a0000"; // Deep blood red
-                statusBox.style.color = "#FF4500";
-            } else {
-                statusBox.innerText = "STATUS: STANDBY";
-                statusBox.style.backgroundColor = "#2a0000";
-                statusBox.style.color = "#888";
-            }
-
-        } catch (error) {
-            console.error("Communication blackout with Torn API:", error);
-        }
-    }
-
-    // Initial pull and auto-refresh every 30 seconds
-    updateDashboard();
-    setInterval(updateDashboard, 30000);
-    async function loadLeaderboard() {
-    // Replace the link below with your "Publish to Web" CSV link from Google Sheets
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnpIVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?output=csv';
-
-    try {
-        const response = await fetch(csvUrl);
-        const data = await response.text();
-        const rows = data.split('\n').slice(1); // Skip the header row
-        
-        let tableHtml = '<table style="width:100%; border-collapse: collapse;">';
-        tableHtml += '<tr style="border-bottom: 1px solid #444; color: #888;"><th>Member</th><th>7-Day Gain</th></tr>';
-
-        rows.forEach(row => {
-            const columns = row.split(',');
-            if (columns.length >= 6) {
-                const name = columns[1];
-                const gain = columns[5]; // Assuming "Weekly Gain" is Column F
-                tableHtml += `<tr style="border-bottom: 1px solid #222;">
-                                <td style="padding: 10px 0;">${name}</td>
-                                <td style="color: #FF8C00; font-weight: bold;">+${gain}</td>
-                              </tr>`;
-            }
-        });
-
-        tableHtml += '</table>';
-        document.getElementById('leaderboard').innerHTML = tableHtml;
-
-    } catch (error) {
-        document.getElementById('leaderboard').innerHTML = "Brain synchronization failed.";
-        console.error("Leaderboard error:", error);
-    }
-}
-
-// Add this line at the very bottom of your script to make it run
-loadLeaderboard();
-</script>
 </body>
 </html>
