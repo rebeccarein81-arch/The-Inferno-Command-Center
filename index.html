@@ -2,27 +2,109 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>INFERNO | COMMAND</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <title>THE BLACK INFERNO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Outfit:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --orange: #FF4500; --glow: rgba(255, 69, 0, 0.4); --glass: rgba(20, 20, 20, 0.85); }
-        body { background: radial-gradient(circle at center, #1a0a00 0%, #000 100%); color: #e0e0e0; font-family: 'Rajdhani', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        h1 { font-family: 'Orbitron', sans-serif; color: var(--orange); letter-spacing: 12px; font-size: 4em; margin-bottom: 50px; text-shadow: 0 0 20px var(--glow); }
-        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 90%; max-width: 1100px; }
-        .nav-card { background: var(--glass); border: 1px solid rgba(255,69,0,0.2); padding: 60px 20px; text-align: center; text-decoration: none; color: white; border-radius: 15px; backdrop-filter: blur(10px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
-        .nav-card::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transition: 0.5s; }
-        .nav-card:hover::before { left: 100%; }
-        .nav-card:hover { transform: translateY(-10px); border-color: var(--orange); box-shadow: 0 0 40px var(--glow); }
-        .nav-card h2 { font-family: 'Orbitron', sans-serif; margin: 0; color: var(--orange); letter-spacing: 2px; }
-        .nav-card p { color: #888; margin-top: 15px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        :root {
+            --inferno-orange: #FF4500;
+            --glow-color: rgba(255, 69, 0, 0.6);
+        }
+
+        body {
+            background-color: #050505;
+            color: #FFFFFF;
+            font-family: 'Outfit', 'Cavolini', sans-serif; /* Priority on your custom font style */
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: 'Outfit', 'Cavolini', sans-serif;
+            font-weight: 900;
+            font-size: 4.5em;
+            color: var(--inferno-orange);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 60px;
+            text-shadow: 0 0 25px var(--glow-color);
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 300px);
+            gap: 30px;
+        }
+
+        .nav-card {
+            background: rgba(20, 20, 20, 0.4); /* Dark base */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 60px 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #FFFFFF;
+            border-radius: 15px;
+            transition: all 0.4s ease;
+            position: relative;
+            /* Underglow effect */
+            box-shadow: 0 15px 30px -15px var(--glow-color);
+        }
+
+        /* The Frosted Glass Hover Effect */
+        .nav-card:hover {
+            background: rgba(255, 255, 255, 0.1); /* Frosted look */
+            backdrop-filter: blur(12px); /* Glass blur */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 69, 0, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px var(--glow-color);
+        }
+
+        .nav-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            margin: 0;
+            color: var(--inferno-orange);
+        }
+
+        .nav-card p {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-card:hover p {
+            color: #CCC;
+        }
     </style>
 </head>
 <body>
-    <h1>INFERNO</h1>
+
+    <h1>THE BLACK INFERNO</h1>
+
     <div class="nav-grid">
-        <a href="stats.html" class="nav-card"><h2>INTELLIGENCE</h2><p>Member Growth & Leaderboards</p></a>
-        <a href="war-room.html" class="nav-card"><h2>WAR ROOM</h2><p>Live Combat & Status Tracker</p></a>
-        <a href="tools.html" class="nav-card"><h2>UTILITIES</h2><p>Tactical Calculators</p></a>
+        <a href="stats.html" class="nav-card">
+            <h2>INTELLIGENCE</h2>
+            <p>Member Growth & Leaderboards</p>
+        </a>
+
+        <a href="war-room.html" class="nav-card">
+            <h2>WAR ROOM</h2>
+            <p>Live Combat & Status Tracker</p>
+        </a>
+
+        <a href="tools.html" class="nav-card">
+            <h2>UTILITIES</h2>
+            <p>Tactical Calculators</p>
+        </a>
     </div>
+
 </body>
 </html>
