@@ -1,89 +1,73 @@
-// --- CONFIGURATION ---
-const BRAIN_CSV_URL = 'PASTE_YOUR_PUBLISHED_CSV_URL_HERE';
+// --- THE BLACK INFERNO COMMAND LOGIC ---
 
-// --- CORE ENGINE ---
-async function ignite() {
-    const key = document.getElementById('apiKey').value;
-    if (key.length === 16) {
-        localStorage.setItem('inferno_key', key);
+// 1. GATEKEEPER: Handles the Login process
+function ignite() {
+    const keyInput = document.getElementById('apiKey').value.trim();
+    
+    // Check for 16-character Torn API Key
+    if(keyInput.length === 16) {
+        localStorage.setItem('inferno_key', keyInput);
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'grid';
         
-        // Run all the math
-        updateIdentity(key);
-        updateGoalProgress(key);
+        // Trigger the math functions immediately after login
+        updateGoalProgress(keyInput);
     } else {
         document.getElementById('error-msg').style.display = 'block';
     }
 }
 
-// MATH: Calculates Progress toward Personal Goal
+// 2. THE BRAIN: Fetches stats and calculates the Goal %
 async function updateGoalProgress(key) {
-    const savedGoal = localStorage.getItem('inferno_user_goal') || 100000000;
-    document.getElementById('goal-target-display').innerText = (savedGoal / 1000000).toFixed(0) + "M";
-
-    const res = await fetch(`https://api.torn.com/user/?selections=profile&key=${key}`);
-    const data = await res.json();
+    // Get the goal from browser memory or default to 100M
+    let rawGoal = localStorage.getItem('inferno_user_goal') || "100000000";
+    let goalNum = Number(rawGoal.replace(/[^0-9.]/g, ''));
     
-    // The Math: Summing the 4 battle stats
-    const total = data.strength + data.speed + data.dexterity + data.defense;
-    const percent = Math.min((total / savedGoal) * 100, 100).toFixed(1);
+    // Safety check: ensure goal isn't zero to avoid NaN errors
+    if (goalNum <= 0) goalNum = 100000000;
 
-    document.getElementById('goal-percent').innerText = percent + "%";
-    document.getElementById('goal-progress-fill').style.width = percent + "%";
-    
-    // Motivation Logic
-    const mot = document.getElementById('motivation-text');
-    if(percent < 50) mot.innerText = "Smoke is rising. Getting stronger.";
-    else if(percent < 100) mot.innerText = "Target in sight. Burn it down.";
-    else mot.innerText = "GOAL ACHIEVED. Set a new target.";
-}
-
-// MATH: Calculates Weekly Gains (API Stats - Google Sheet Stats)
-async function loadLeaderboard() {
-    const tbody = document.getElementById('leaderboard-data');
-    tbody.innerHTML = '<tr><td colspan="3">Calculating gains...</td></tr>';
+    // Display the goal in millions (e.g., 100M)
+    document.getElementById('goal-target-display').innerText = (goalNum / 1000000).toFixed(0) + "M";
 
     try {
-        const response = await fetch(BRAIN_CSV_URL);
-        const csvText = await response.text();
-        const rows = csvText.split('\n').slice(1); // Skip header
+        // Fetch live stats from Torn API
+        const res = await fetch(`https://api.torn.com/user/?selections=profile&key=${key}`);
+        const data = await res.json();
+        
+        if (data.error) {
+            document.getElementById('motivation-text').innerText = "API Error. Check Key.";
+            return;
+        }
 
-        tbody.innerHTML = ''; // Clear loading
-        rows.forEach((row, index) => {
-            const cols = row.split(',');
-            if (cols.length >= 2) {
-                const name = cols[0];
-                const oldStats = parseFloat(cols[1]); // Stats from last week
-                
-                // In a full version, we'd fetch each member's live stats here
-                // For now, we display the gain recorded in 'The Brain'
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="padding:15px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:bold;">${name}</td>
-                    <td style="padding:15px; border-bottom:1px solid rgba(255,255,255,0.05); color:#00ff00;">+${oldStats.toLocaleString()}</td>
-                    <td style="padding:15px; border-bottom:1px solid rgba(255,255,255,0.05); color:#888;">#${index + 1}</td>
-                `;
-                tbody.appendChild(tr);
+        // The Math: Convert stats to numbers and sum them up
+        const total = (Number(data.strength) || 0) + 
+                      (Number(data.speed) || 0) + 
+                      (Number(data.dexterity) || 0) + 
+                      (Number(data.defense) || 0);
+
+        // Update UI with the result
+        if (total > 0) {
+            let percent = ((total / goalNum) * 100).toFixed(1);
+            document.getElementById('display-name').innerText = data.name;
+            document.getElementById('goal-percent').innerText = percent + "%";
+            document.getElementById('goal-progress-fill').style.width = Math.min(percent, 100) + "%";
+            
+            // Set Motivational message based on progress
+            const mot = document.getElementById('motivation-text');
+            if (percent >= 100) {
+                mot.innerText = "GOAL ACHIEVED. Raise the stakes.";
+                mot.style.color = "#ff4500";
+            } else {
+                mot.innerText = "Target locked. Burn through the gym.";
+                mot.style.color = "#666";
             }
-        });
+        }
     } catch (err) {
-        console.error("The Brain is offline.", err);
+        console.error("Critical Failure connecting to Torn:", err);
     }
 }
 
-// --- NAVIGATION & UTILS ---
-function showSection(section) {
-    document.getElementById('dash-view').style.display = (section === 'dash') ? 'grid' : 'none';
-    document.getElementById('intel-view').style.display = (section === 'intel') ? 'block' : 'none';
-    if(section === 'intel') loadLeaderboard();
-}
-
-function toggleGoalInput() {
-    const area = document.getElementById('goal-input-area');
-    area.style.display = (area.style.display === 'none') ? 'block' : 'none';
-}
-
+// 3. UTILITIES: Controls UI interactions
 function saveGoal() {
     const val = document.getElementById('new-goal-val').value;
     if(val) {
@@ -93,9 +77,26 @@ function saveGoal() {
     }
 }
 
-function logout() { localStorage.removeItem('inferno_key'); location.reload(); }
+function toggleGoalInput() {
+    const area = document.getElementById('goal-input-area');
+    area.style.display = (area.style.display === 'none') ? 'block' : 'none';
+}
 
+function showSection(s) {
+    document.getElementById('dash-view').style.display = (s === 'dash') ? 'grid' : 'none';
+    document.getElementById('intel-view').style.display = (s === 'intel') ? 'block' : 'none';
+}
+
+function logout() { 
+    localStorage.removeItem('inferno_key'); 
+    location.reload(); 
+}
+
+// 4. AUTO-IGNITE: Logs user in automatically if key exists
 window.onload = () => {
     const saved = localStorage.getItem('inferno_key');
-    if(saved) { document.getElementById('apiKey').value = saved; ignite(); }
+    if(saved) {
+        document.getElementById('apiKey').value = saved;
+        ignite();
+    }
 };
