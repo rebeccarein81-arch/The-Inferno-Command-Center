@@ -1,38 +1,53 @@
 <script>
-    // THE SECRET: Point this ONLY to the History tab CSV link
-    const BRAIN_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnpIVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?gid=722061266&single=true&output=csv';
+    // Using your specific History tab link
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnplVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?gid=722061266&single=true&output=csv';
 
-    async function loadData() {
+    async function loadSheet() {
         try {
-            const response = await fetch(BRAIN_CSV);
-            const text = await response.text();
-            const rows = text.split('\n').map(r => r.split(','));
+            const response = await fetch(CSV_URL);
+            const data = await response.text();
             
-            const tbody = document.querySelector('#memberTable tbody');
+            // Basic check: if the sheet is empty, don't crash
+            if (!data || data.length < 10) {
+                throw new Error("Sheet is empty");
+            }
+
+            const rows = data.split('\n').map(row => row.split(','));
+            const tbody = document.querySelector('#statsTable tbody');
             tbody.innerHTML = '';
 
-            const latestEntries = {};
-            // Skip the header row (index 0)
-            rows.slice(1).forEach(row => {
-                if(row[2]) {
-                    // Logic: Overwrites older entries with the newest one found
-                    latestEntries[row[2].trim()] = row; 
+            const latest = {};
+            // Start from row 1 to skip headers
+            for (let i = 1; i < rows.length; i++) {
+                const r = rows[i];
+                // Check if ID (Column C / Index 2) exists
+                if (r && r[2] && r[2].trim() !== "") {
+                    latest[r[2].trim()] = r; 
                 }
-            });
+            }
 
-            Object.values(latestEntries).forEach(entry => {
+            const entries = Object.values(latest);
+            if (entries.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No member history found in this tab.</td></tr>';
+                return;
+            }
+
+            entries.forEach(entry => {
                 const tr = document.createElement('tr');
+                // Column A: Date, B: Name, C: ID, D: Stats
                 tr.innerHTML = `
-                    <td style="font-weight:bold; color:#FF4500;">${entry[1]}</td>
-                    <td>Recorded: ${entry[0]}</td>
-                    <td>Member</td>
-                    <td style="color:#FF4500; font-weight:bold;">${Number(entry[3]).toLocaleString()}</td>
+                    <td style="color:var(--orange); font-weight:bold;">${entry[1] || 'Unknown'}</td>
+                    <td>${entry[0] || '---'}</td>
+                    <td>Active</td>
+                    <td style="color:var(--orange); font-weight:bold;">${entry[3] ? Number(entry[3]).toLocaleString() : '0'}</td>
                 `;
                 tbody.appendChild(tr);
             });
+
         } catch (e) {
-            console.error("Load Failed", e);
+            console.error("Manual Load Error:", e);
+            document.querySelector('#statsTable tbody').innerHTML = `<tr><td colspan="4" style="text-align:center;">OFFLINE: Check if tab 722061266 has data.</td></tr>`;
         }
     }
-    loadData();
+    loadSheet();
 </script>
