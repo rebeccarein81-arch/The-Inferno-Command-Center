@@ -3,85 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title>INFERNO | INTELLIGENCE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Outfit:wght@900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #050505; color: #EEE; font-family: 'Rajdhani', sans-serif; margin: 0; padding: 0; }
-        .top-nav { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid #FF4500; padding: 15px; display: flex; justify-content: center; gap: 20px; }
+        :root { --orange: #FF4500; --glow: rgba(255, 69, 0, 0.6); }
+        body { background: #050505; color: #EEE; font-family: 'Rajdhani', sans-serif; margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; position: relative; }
+        .smoke-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2; }
+        .smoke { position: absolute; width: 200%; height: 200%; background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); filter: blur(50px); animation: drift 60s linear infinite; }
+        @keyframes drift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .top-nav { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid var(--orange); padding: 15px; display: flex; justify-content: center; gap: 20px; position: sticky; top: 0; z-index: 100; }
         .nav-link { color: #888; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8em; transition: 0.3s; }
-        .nav-link:hover { color: #FF4500; }
-        
-        .container { max-width: 1100px; margin: 40px auto; padding: 20px; }
-        h1 { font-family: 'Orbitron', sans-serif; color: #FF4500; text-align: center; letter-spacing: 4px; }
-        
-        .stats-table { width: 100%; border-collapse: collapse; background: rgba(20,20,20,0.8); border-radius: 10px; overflow: hidden; }
-        .stats-table th { background: #000; color: #FF4500; font-family: 'Orbitron', sans-serif; font-size: 0.75em; padding: 15px; text-align: left; }
-        .stats-table td { padding: 15px; border-bottom: 1px solid #222; }
-        .stats-table tr:hover { background: rgba(255,69,0,0.05); }
-        
-        .name-link { color: #FF8C00; font-weight: bold; text-decoration: none; }
-        .name-link:hover { text-decoration: underline; color: #FF4500; }
-        
-        .search-bar { width: 100%; max-width: 400px; display: block; margin: 20px auto; padding: 10px; background: #111; border: 1px solid #FF4500; color: white; border-radius: 20px; text-align: center; }
+        .nav-link:hover { color: var(--orange); }
+        .container { max-width: 1100px; margin: 40px auto; padding: 20px; position: relative; }
+        h1 { font-family: 'Outfit', sans-serif; font-weight: 900; color: var(--orange); text-align: center; letter-spacing: 4px; text-shadow: 0 0 20px var(--glow); font-size: 3.5em; text-transform: uppercase; }
+        .search-bar { width: 100%; max-width: 400px; display: block; margin: 20px auto; padding: 12px; background: rgba(0,0,0,0.6); border: 1px solid var(--orange); color: white; border-radius: 25px; text-align: center; font-family: 'Orbitron', sans-serif; outline: none; }
+        .stats-table { width: 100%; border-collapse: collapse; background: rgba(20,20,20,0.8); backdrop-filter: blur(15px); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .stats-table th { background: #000; color: var(--orange); font-family: 'Orbitron', sans-serif; font-size: 0.75em; padding: 20px; text-align: left; border-bottom: 1px solid var(--orange); }
+        .stats-table td { padding: 18px; border-bottom: 1px solid #222; font-size: 1.2em; }
+        .stats-table tr:hover { background: rgba(255,69,0,0.1); }
+        .name-link { color: var(--orange); font-weight: bold; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .name-link:hover { border-bottom: 1px solid var(--orange); }
     </style>
 </head>
 <body>
+    <div class="smoke-container"><div class="smoke"></div></div>
     <nav class="top-nav">
         <a href="index.html" class="nav-link">MAIN HUB</a>
         <a href="war-room.html" class="nav-link">WAR ROOM</a>
         <a href="tools.html" class="nav-link">UTILITIES</a>
     </nav>
-
     <div class="container">
-        <h1>MEMBER INTELLIGENCE</h1>
+        <h1>INTELLIGENCE</h1>
         <input type="text" class="search-bar" id="memberSearch" placeholder="SEARCH ROSTER..." onkeyup="filterTable()">
-        
         <table class="stats-table" id="memberTable">
             <thead>
                 <tr>
                     <th>MEMBER</th>
                     <th>LAST ACTION</th>
                     <th>ROLE</th>
-                    <th>TOTAL BATTLE STATS</th>
+                    <th>BATTLE STATS</th>
                 </tr>
             </thead>
-            <tbody>
-                </tbody>
+            <tbody></tbody>
         </table>
     </div>
-
     <script>
-        const API_KEY = '8dOffVkNSWgShB27';
+        const API_KEY = '8dOfVkNSWgShB27'; 
         const FAC_ID = '51373';
-        const BRAIN_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnpIVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pubhtml';
+        const BRAIN_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnplVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pub?gid=0&single=true&output=csv';
 
         async function loadData() {
-            const [tornRes, sheetRes] = await Promise.all([
-                fetch(`https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`),
-                fetch(BRAIN_CSV)
-            ]);
-
-            const tornData = await tornRes.json();
-            const sheetText = await sheetRes.text();
-            const sheetRows = sheetText.split('\n').map(r => r.split(','));
-
-            const tbody = document.querySelector('#memberTable tbody');
-            tbody.innerHTML = '';
-
-            Object.values(tornData.members).forEach(m => {
-                // Find latest stat entry in Google Sheet by Member ID
-                const statsEntry = sheetRows.reverse().find(r => r[2] == m.id) || [0,0,0,"0"];
-                
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><a href="member-detail.html?id=${m.id}" class="name-link">${m.name}</a></td>
-                    <td>${m.last_action.relative}</td>
-                    <td>${m.position}</td>
-                    <td style="color:#FF4500; font-weight:bold;">${Number(statsEntry[3]).toLocaleString()}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+            try {
+                const [tornRes, sheetRes] = await Promise.all([
+                    fetch(`https://api.torn.com/faction/${FAC_ID}?selections=basic&key=${API_KEY}`),
+                    fetch(BRAIN_CSV)
+                ]);
+                const tornData = await tornRes.json();
+                const sheetText = await sheetRes.text();
+                const sheetRows = sheetText.split('\n').map(r => r.split(','));
+                const tbody = document.querySelector('#memberTable tbody');
+                tbody.innerHTML = '';
+                Object.values(tornData.members).sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
+                    const statsEntry = sheetRows.reverse().find(r => r[2] == m.id) || ["", "", m.id, "0"];
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><a href="member-detail.html?id=${m.id}" class="name-link">${m.name}</a></td>
+                        <td>${m.last_action.relative}</td>
+                        <td>${m.position}</td>
+                        <td style="color:var(--orange); font-weight:bold;">${Number(statsEntry[3]).toLocaleString()}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) { console.error("Data Error", e); }
         }
-
         function filterTable() {
             let filter = document.getElementById("memberSearch").value.toUpperCase();
             let rows = document.getElementById("memberTable").getElementsByTagName("tr");
@@ -90,7 +83,6 @@
                 rows[i].style.display = name.toUpperCase().indexOf(filter) > -1 ? "" : "none";
             }
         }
-
         loadData();
     </script>
 </body>
