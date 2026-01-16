@@ -101,6 +101,47 @@
     </div>
 
 </div>
+<script>
+    // COMMAND CONFIGURATION
+    const API_KEY = '8dOffVkNSWgShB27'; 
+    const FACTION_ID = '3788891';
 
+    async function updateDashboard() {
+        const url = `https://api.torn.com/faction/${FACTION_ID}?selections=basic&key=${API_KEY}`;
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            // 1. Update Respect
+            if (data.respect) {
+                document.getElementById('respect').innerText = data.respect.toLocaleString();
+            }
+
+            // 2. Update Chain & War Status
+            const chain = data.chain.current;
+            const statusBox = document.querySelector('.war-status');
+            
+            document.getElementById('chain').innerText = chain;
+
+            if (chain > 0) {
+                statusBox.innerText = `WAR ACTIVE: ${chain} HIT CHAIN`;
+                statusBox.style.backgroundColor = "#4a0000"; // Deep blood red
+                statusBox.style.color = "#FF4500";
+            } else {
+                statusBox.innerText = "STATUS: STANDBY";
+                statusBox.style.backgroundColor = "#2a0000";
+                statusBox.style.color = "#888";
+            }
+
+        } catch (error) {
+            console.error("Communication blackout with Torn API:", error);
+        }
+    }
+
+    // Initial pull and auto-refresh every 30 seconds
+    updateDashboard();
+    setInterval(updateDashboard, 30000);
+</script>
 </body>
 </html>
