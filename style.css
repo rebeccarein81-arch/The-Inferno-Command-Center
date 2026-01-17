@@ -171,3 +171,26 @@ body {
 input[type="text"] {
     outline: none;
 }
+/* --- CUSTOM SCROLLBAR --- */
+.main-view::-webkit-scrollbar {
+    width: 6px;
+}
+.main-view::-webkit-scrollbar-track {
+    background: var(--obsidian);
+}
+.main-view::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+.main-view::-webkit-scrollbar-thumb:hover {
+    background: var(--inferno);
+}
+
+/* --- CARD HOVER EFFECT --- */
+.glass-card {
+    transition: border 0.3s ease, transform 0.3s ease;
+}
+.glass-card:hover {
+    border: 1px solid var(--border);
+    transform: translateY(-2px);
+}
