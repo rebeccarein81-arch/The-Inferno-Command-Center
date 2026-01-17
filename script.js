@@ -4,10 +4,7 @@ let warInterval;
 
 async function ignite() {
     const key = document.getElementById('apiKey').value.trim();
-    if (key.length !== 16) {
-        document.getElementById('error-msg').style.display = 'block';
-        return;
-    }
+    if (key.length !== 16) return;
 
     try {
         const res = await fetch(`https://api.torn.com/user/?selections=profile&key=${key}`);
@@ -16,7 +13,7 @@ async function ignite() {
         if (data.name) {
             localStorage.setItem('inferno_key', key);
             
-            // Check Permissions
+            // Apply Permissions
             const isLeadership = LEADERSHIP_ROLES.includes(data.faction.position);
             document.querySelectorAll('.admin-only').forEach(el => {
                 el.style.display = isLeadership ? 'block' : 'none';
@@ -28,48 +25,54 @@ async function ignite() {
             
             updateGoalProgress(key);
         }
-    } catch (e) { console.error("Login failed", e); }
+    } catch (e) { console.error(e); }
+}
+
+async function loadIntelligence() {
+    try {
+        const res = await fetch(BRAIN_CSV_URL);
+        const csv = await res.text();
+        const rows = csv.split('\n').filter(r => r.trim() && !r.includes('pageUrl')).slice(1);
+        
+        const roster = document.getElementById('roster-data');
+        const leader = document.getElementById('leaderboard-data');
+        roster.innerHTML = ''; leader.innerHTML = '';
+
+        rows.forEach(row => {
+            const col = row.split(',').map(c => c.trim().replace(/"/g, ''));
+            if (col.length >= 6 && col[1] !== 'null') {
+                roster.innerHTML += `<tr><td style="padding:10px;">${col[1]}</td><td style="padding:10px;">${col[4]}</td></tr>`;
+                leader.innerHTML += `<tr><td style="padding:10px;">${col[1]}</td><td style="padding:10px; color:#0ff;">+${col[5]}</td></tr>`;
+            }
+        });
+    } catch (e) { console.error(e); }
 }
 
 async function scoutPlayer() {
-    const targetId = document.getElementById('recruit-id').value.trim();
+    const id = document.getElementById('recruit-id').value.trim();
     const key = localStorage.getItem('inferno_key');
-    const resultsDiv = document.getElementById('recruit-results');
+    const resDiv = document.getElementById('recruit-results');
+    if (!id) return;
     
-    if (!targetId) return;
-    resultsDiv.innerHTML = "Scouting...";
-
+    resDiv.innerHTML = "Analyzing...";
     try {
-        const res = await fetch(`https://api.torn.com/user/${targetId}?selections=profile,personalstats&key=${key}`);
+        const res = await fetch(`https://api.torn.com/user/${id}?selections=profile,personalstats&key=${key}`);
         const data = await res.json();
-        
         if (data.name) {
-            resultsDiv.innerHTML = `
-                <div style="border-left: 2px solid #ff4500; padding-left:15px;">
-                    <p><strong>NAME:</strong> ${data.name} [${targetId}]</p>
-                    <p><strong>LEVEL:</strong> ${data.level}</p>
-                    <p><strong>STATUS:</strong> ${data.status.description}</p>
-                    <p><strong>XANAX TAKEN:</strong> ${data.personalstats.xantaken || 0}</p>
-                </div>
-            `;
-        } else { resultsDiv.innerHTML = "Player not found."; }
-    } catch (e) { resultsDiv.innerHTML = "Error fetching data."; }
+            resDiv.innerHTML = `<div style="border-left:2px solid #ff4500; padding:15px; background:rgba(255,255,255,0.05);">
+                <p><strong>${data.name} [${id}]</strong></p>
+                <p>Status: ${data.status.description}</p>
+                <p>Xanax: ${data.personalstats.xantaken || 0}</p>
+            </div>`;
+        }
+    } catch (e) { resDiv.innerHTML = "Error."; }
 }
 
-// ... existing updateGoalProgress and loadIntelligence functions ...
-
 function showSection(s) {
-    const views = ['dash-view', 'intel-view', 'recruit-view', 'war-view'];
-    views.forEach(v => document.getElementById(v).style.display = 'none');
+    ['dash-view', 'intel-view', 'recruit-view', 'war-view'].forEach(v => document.getElementById(v).style.display = 'none');
     document.getElementById(s + '-view').style.display = (s === 'dash') ? 'grid' : 'block';
     document.getElementById('view-title').innerText = s.toUpperCase();
-    
-    clearInterval(warInterval);
     if (s === 'intel') loadIntelligence();
-    if (s === 'war') {
-        updateWarData();
-        warInterval = setInterval(updateWarData, 15000);
-    }
 }
 
 function logout() { localStorage.removeItem('inferno_key'); location.reload(); }
