@@ -43,6 +43,11 @@
 
             <div id="dash-view" class="stats-grid">
                 <div class="glass-card">
+                    <div class="card-label">Weekly Stat Growth</div>
+                    <div class="card-value">+1.2M</div>
+                    <div style="color:#00ff00; font-size:0.8rem; margin-top: 5px;">▲ 14% VS LAST WEEK</div>
+                </div>
+                <div class="glass-card">
                     <div class="card-label">Goal Progress</div>
                     <div class="card-value" id="goal-percent">0%</div>
                     <div class="progress-bg"><div id="goal-progress-fill" class="progress-fill"></div></div>
@@ -52,28 +57,42 @@
             <div id="intel-view" style="display: none;">
                 <div class="stats-grid">
                     <div class="glass-card">
-                        <h3 class="card-label">Member Performance</h3>
-                        <table style="width: 100%; margin-top:15px;"><tbody id="roster-data"></tbody></table>
+                        <h3 class="card-label">Member Activity</h3>
+                        <table style="width: 100%; margin-top:15px; border-collapse: collapse;">
+                            <thead><tr style="text-align: left; color: #666; border-bottom: 1px solid #333;">
+                                <th style="padding:10px;">NAME</th><th style="padding:10px;">XANAX</th>
+                            </tr></thead>
+                            <tbody id="roster-data"></tbody>
+                        </table>
+                    </div>
+                    <div class="glass-card">
+                        <h3 class="card-label">Top Gainers</h3>
+                        <table style="width: 100%; margin-top:15px; border-collapse: collapse;">
+                            <thead><tr style="text-align: left; color: #666; border-bottom: 1px solid #333;">
+                                <th style="padding:10px;">NAME</th><th style="padding:10px;">GAIN</th>
+                            </tr></thead>
+                            <tbody id="leaderboard-data"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
             <div id="recruit-view" style="display: none;">
                 <div class="glass-card">
-                    <h3 class="card-label">External Intel</h3>
+                    <h3 class="card-label">Recruitment Scout</h3>
                     <div style="margin: 20px 0; display: flex; gap: 10px;">
-                        <input type="text" id="recruit-id" placeholder="Enter Player ID" style="background:#000; border:1px solid #333; color:white; padding:10px; flex:1;">
+                        <input type="text" id="recruit-id" placeholder="Player ID" style="background:#000; border:1px solid #333; color:white; padding:10px; flex:1;">
                         <button onclick="scoutPlayer()" style="background:#ff4500; color:white; border:none; padding:10px 20px; cursor:pointer;">SCOUT</button>
                     </div>
-                    <div id="recruit-results" style="margin-top:20px; font-size:0.9rem;"></div>
+                    <div id="recruit-results"></div>
                 </div>
             </div>
 
             <div id="war-view" style="display: none;">
                 <div class="glass-card">
-                    <div class="card-label">Chain Timer</div>
+                    <div class="card-label">Chain Watcher</div>
                     <div class="card-value" id="chain-count">0</div>
-                    <div id="chain-timer" style="color: #ff4500; font-family: 'Orbitron';">0:00</div>
+                    <div id="chain-timer" style="color: #ff4500; font-family: 'Orbitron'; font-size: 1.5rem;">0:00</div>
                 </div>
             </div>
         </main>
