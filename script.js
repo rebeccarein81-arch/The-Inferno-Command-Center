@@ -1,4 +1,4 @@
-const BRAIN_CSV_URL = 'PASTE_YOUR_CSV_LINK_HERE';
+const BRAIN_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnpIVPLG6flEQ_DCD8ydwGyKlZh2xr6Gkej4RdcajQPJ1M2-CCKZvi_EDn8PKUhvHzNqe2gdgvNr2t/pubhtml';
 let warInterval;
 
 function ignite() {
