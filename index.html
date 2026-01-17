@@ -20,11 +20,11 @@
 
     <div id="dashboard" style="display: none;">
         <aside class="sidebar">
-            <h2 style="color:#ff4500; font-family:'Orbitron'; margin-bottom: 40px; text-align: center;">Inferno HQ</h2>
-            <nav style="display: flex; flex-direction: column; gap: 10px;">
+            <h2>Inferno HQ</h2>
+            <nav>
                 <div class="nav-link active" onclick="showSection('dash')">DASHBOARD</div>
                 <div class="nav-link" onclick="showSection('intel')">INTELLIGENCE</div>
-                <div class="nav-link">WAR ROOM</div>
+                <div class="nav-link" onclick="showSection('war')">WAR ROOM</div>
                 <div class="nav-link">BAZAAR</div>
                 <div class="nav-link">UTILITIES</div>
             </nav>
@@ -35,10 +35,10 @@
 
         <main class="main-view">
             <div class="header-bar">
-                <h1 style="font-weight: 900; text-transform: uppercase;">Command Briefing</h1>
+                <h1 id="view-title">Command Briefing</h1>
                 <div class="user-chip">
                     <div class="status-dot"></div>
-                    <span id="display-name" style="font-weight: bold;">Commander</span>
+                    <span id="display-name">Commander</span>
                 </div>
             </div>
 
@@ -62,20 +62,19 @@
                     </div>
                     <div class="card-value" id="goal-percent">0%</div>
                     <div id="motivation-text" style="color: #666; font-size: 0.7rem; font-style: italic; margin-bottom: 8px; height:14px;">Initializing...</div>
-                    <div class="progress-bg"><div id="goal-progress-fill" class="progress-fill" style="width: 0%;"></div></div>
+                    <div class="progress-bg"><div id="goal-progress-fill" class="progress-fill"></div></div>
 
                     <div id="goal-input-area" style="display:none; margin-top:15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                        <input type="text" id="new-goal-val" placeholder="Total Stats (Ex: 500000000)" style="background:#000; border:1px solid #333; color:white; padding:8px; width:65%; border-radius:5px;">
+                        <input type="text" id="new-goal-val" placeholder="Ex: 500000000" style="background:#000; border:1px solid #333; color:white; padding:8px; width:65%; border-radius:5px;">
                         <button onclick="saveGoal()" style="background:#ff4500; border:none; color:white; padding:8px 12px; cursor:pointer; border-radius:5px; font-weight:bold;">SAVE</button>
                     </div>
                 </div>
             </div>
 
             <div id="intel-view" style="display: none;">
-                <h2 style="font-family:'Orbitron'; color: #ff4500; margin-bottom: 20px;">Faction Intelligence</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="stats-grid">
                     <div class="glass-card">
-                        <h3 style="color: #ff4500; font-size: 0.9rem; margin-bottom: 15px;">MEMBER ACTIVITY</h3>
+                        <h3 class="card-label" style="margin-bottom:15px;">Member Activity</h3>
                         <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
                             <thead><tr style="text-align: left; color: #666; border-bottom: 1px solid #333;">
                                 <th style="padding: 10px;">NAME</th><th style="padding: 10px;">XANAX</th>
@@ -84,13 +83,29 @@
                         </table>
                     </div>
                     <div class="glass-card">
-                        <h3 style="color: #ff4500; font-size: 0.9rem; margin-bottom: 15px;">TOP GAINERS</h3>
+                        <h3 class="card-label" style="margin-bottom:15px;">Top Gainers</h3>
                         <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
                             <thead><tr style="text-align: left; color: #666; border-bottom: 1px solid #333;">
                                 <th style="padding: 10px;">NAME</th><th style="padding: 10px;">GAIN</th>
                             </tr></thead>
                             <tbody id="leaderboard-data"></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="war-view" style="display: none;">
+                <div class="stats-grid">
+                    <div class="glass-card" style="border-left: 4px solid #ff4500;">
+                        <div class="card-label">Current Chain</div>
+                        <div class="card-value" id="chain-count">0</div>
+                        <div id="chain-timer" style="color: #ff4500; font-family: 'Orbitron'; font-size: 1.2rem; margin-top: 10px;">0:00</div>
+                        <div class="progress-bg"><div id="chain-bar" class="progress-fill"></div></div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="card-label">War Status</div>
+                        <div id="war-target-name" class="card-value" style="font-size: 1.5rem;">NO ACTIVE WAR</div>
+                        <div id="war-score" style="color: #888; margin-top: 5px;">Awaiting Data...</div>
                     </div>
                 </div>
             </div>
