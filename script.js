@@ -13,7 +13,7 @@ async function ignite() {
         if (data.name) {
             localStorage.setItem('inferno_key', key);
             
-            // Apply Permissions
+            // ROLE ACCESS
             const isLeadership = LEADERSHIP_ROLES.includes(data.faction.position);
             document.querySelectorAll('.admin-only').forEach(el => {
                 el.style.display = isLeadership ? 'block' : 'none';
@@ -32,6 +32,7 @@ async function loadIntelligence() {
     try {
         const res = await fetch(BRAIN_CSV_URL);
         const csv = await res.text();
+        // Clean rows to avoid metadata errors
         const rows = csv.split('\n').filter(r => r.trim() && !r.includes('pageUrl')).slice(1);
         
         const roster = document.getElementById('roster-data');
@@ -54,7 +55,7 @@ async function scoutPlayer() {
     const resDiv = document.getElementById('recruit-results');
     if (!id) return;
     
-    resDiv.innerHTML = "Analyzing...";
+    resDiv.innerHTML = "Accessing Database...";
     try {
         const res = await fetch(`https://api.torn.com/user/${id}?selections=profile,personalstats&key=${key}`);
         const data = await res.json();
@@ -65,14 +66,35 @@ async function scoutPlayer() {
                 <p>Xanax: ${data.personalstats.xantaken || 0}</p>
             </div>`;
         }
-    } catch (e) { resDiv.innerHTML = "Error."; }
+    } catch (e) { resDiv.innerHTML = "Error fetching scout data."; }
 }
 
 function showSection(s) {
-    ['dash-view', 'intel-view', 'recruit-view', 'war-view'].forEach(v => document.getElementById(v).style.display = 'none');
+    const views = ['dash-view', 'intel-view', 'recruit-view', 'war-view'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
     document.getElementById(s + '-view').style.display = (s === 'dash') ? 'grid' : 'block';
     document.getElementById('view-title').innerText = s.toUpperCase();
+    
+    clearInterval(warInterval);
     if (s === 'intel') loadIntelligence();
+    if (s === 'war') {
+        updateWarData();
+        warInterval = setInterval(updateWarData, 15000);
+    }
+}
+
+async function updateWarData() {
+    const key = localStorage.getItem('inferno_key');
+    try {
+        const res = await fetch(`https://api.torn.com/faction/?selections=basic&key=${key}`);
+        const data = await res.json();
+        if (data.chain) {
+            document.getElementById('chain-count').innerText = data.chain.current;
+            let mins = Math.floor(data.chain.timeout / 60);
+            let secs = data.chain.timeout % 60;
+            document.getElementById('chain-timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+    } catch (e) { console.error(e); }
 }
 
 function logout() { localStorage.removeItem('inferno_key'); location.reload(); }
