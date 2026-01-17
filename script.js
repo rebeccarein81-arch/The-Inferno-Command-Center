@@ -1,90 +1,51 @@
-// --- THE BLACK INFERNO ENGINE ---
+// Replace this with your actual Published CSV link from Google Sheets
+const BRAIN_CSV_URL = 'PASTE_YOUR_CSV_LINK_HERE';
 
-function ignite() {
-    const keyInput = document.getElementById('apiKey').value.trim();
-    if(keyInput.length === 16) {
-        localStorage.setItem('inferno_key', keyInput);
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'grid';
-        // Force immediate math calculation
-        updateGoalProgress(keyInput);
-    } else {
-        document.getElementById('error-msg').style.display = 'block';
-    }
-}
-
-async function updateGoalProgress(key) {
-    // 1. Get Goal - Clean input and handle defaults
-    let rawGoal = localStorage.getItem('inferno_user_goal') || "100000000";
-    let goalNum = Number(rawGoal.replace(/[^0-9.]/g, ''));
-    if (goalNum <= 0) goalNum = 100000000;
-
-    document.getElementById('goal-target-display').innerText = (goalNum / 1000000).toFixed(0) + "M";
-
+async function loadIntelligence() {
+    const rosterBody = document.getElementById('roster-data');
+    const leaderBody = document.getElementById('leaderboard-data');
+    
     try {
-        // 2. Fetch User Stats
-        const res = await fetch(`https://api.torn.com/user/?selections=profile&key=${key}`);
-        const data = await res.json();
-        
-        if (data.error) {
-            document.getElementById('motivation-text').innerText = "API Error. Check Key.";
-            return;
-        }
+        const response = await fetch(BRAIN_CSV_URL);
+        const csvText = await response.text();
+        const rows = csvText.split('\n').slice(1); // Skip header
 
-        // 3. The Math: Convert stats to pure numbers
-        const total = (Number(data.strength) || 0) + 
-                      (Number(data.speed) || 0) + 
-                      (Number(data.dexterity) || 0) + 
-                      (Number(data.defense) || 0);
+        rosterBody.innerHTML = ''; 
+        leaderBody.innerHTML = '';
 
-        // 4. Update UI - Only calculate if stats exist
-        if (total > 0) {
-            let percent = ((total / goalNum) * 100).toFixed(1);
-            document.getElementById('display-name').innerText = data.name;
-            document.getElementById('goal-percent').innerText = percent + "%";
-            document.getElementById('goal-progress-fill').style.width = Math.min(percent, 100) + "%";
-            
-            const mot = document.getElementById('motivation-text');
-            mot.innerText = (percent >= 100) ? "GOAL ACHIEVED. Raise the stakes." : "Target locked. Burn through the gym.";
-        }
+        rows.forEach(row => {
+            const cols = row.split(',');
+            if (cols.length >= 3) {
+                const name = cols[0].trim();
+                const role = cols[1].trim();
+                const gain = cols[2].trim();
+
+                // Add to Roster Table
+                const rosterRow = `<tr>
+                    <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:bold;">${name}</td>
+                    <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); color:#888;">${role}</td>
+                </tr>`;
+                rosterBody.innerHTML += rosterRow;
+
+                // Add to Leaderboard Table
+                const leaderRow = `<tr>
+                    <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:bold;">${name}</td>
+                    <td style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); color:#00ff00;">+${gain}</td>
+                </tr>`;
+                leaderBody.innerHTML += leaderRow;
+            }
+        });
     } catch (err) {
-        console.error("Critical Failure:", err);
+        console.error("The Brain is not responding:", err);
     }
 }
 
-// UI CONTROLS
-function saveGoal() {
-    const val = document.getElementById('new-goal-val').value;
-    if(val) {
-        localStorage.setItem('inferno_user_goal', val);
-        document.getElementById('goal-input-area').style.display = 'none';
-        updateGoalProgress(localStorage.getItem('inferno_key'));
-    }
-}
-
-function toggleGoalInput() {
-    const area = document.getElementById('goal-input-area');
-    area.style.display = (area.style.display === 'none') ? 'block' : 'none';
-}
-
+// Update your showSection function to call this
 function showSection(s) {
     document.getElementById('dash-view').style.display = (s === 'dash') ? 'grid' : 'none';
     document.getElementById('intel-view').style.display = (s === 'intel') ? 'block' : 'none';
     
-    // Toggle active link visual
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-    // This assumes the first two links are Dash and Intel
-}
-
-function logout() { 
-    localStorage.removeItem('inferno_key'); 
-    location.reload(); 
-}
-
-window.onload = () => {
-    const saved = localStorage.getItem('inferno_key');
-    if(saved) {
-        document.getElementById('apiKey').value = saved;
-        ignite();
+    if (s === 'intel') {
+        loadIntelligence(); // Pull data when Intel tab is clicked
     }
-};
+}
