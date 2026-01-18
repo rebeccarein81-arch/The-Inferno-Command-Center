@@ -93,14 +93,22 @@
                 </div>
             </div>
 
-            <div id="recruit-view" style="display: none;">
-                <div class="glass-card">
-                    <h3 class="card-label">Recruitment Scout</h3>
-                    <div style="margin: 20px 0; display: flex; gap: 10px;">
-                        <input type="text" id="recruit-id" placeholder="Player ID" style="background:#000; border:1px solid #333; color:white; padding:10px; flex:1;">
-                        <button onclick="scoutPlayer()" style="background:#ff4500; color:white; border:none; padding:10px 20px; cursor:pointer;">SCOUT</button>
-                    </div>
-                    <div id="recruit-results"></div>
+           <div id="recruit-view" style="display: none;">
+    <div class="glass-card">
+        <h3 class="card-label">External Scout & Notebook</h3>
+        <div style="margin: 20px 0; display: flex; gap: 10px;">
+            <input type="text" id="recruit-id" placeholder="Player ID" style="background:#000; border:1px solid #333; color:white; padding:10px; flex:1;">
+            <button onclick="scoutPlayer()" style="background:#ff4500; color:white; border:none; padding:10px 20px; cursor:pointer;">SCOUT</button>
+        </div>
+        
+        <div id="notebook-area" style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+            <textarea id="recruit-note-input" placeholder="Enter tactical notes here..." style="width: 100%; background: #000; color: white; border: 1px solid #333; padding: 10px; height: 60px;"></textarea>
+            <button onclick="saveRecruitNote()" style="margin-top: 10px; background: #333; color: #ff4500; border: 1px solid #ff4500; padding: 8px 15px; cursor: pointer; font-weight: bold;">SAVE TO HQ</button>
+        </div>
+
+        <div id="recruit-results" style="margin-top:20px;"></div>
+    </div>
+</div>
                 </div>
             </div>
 
