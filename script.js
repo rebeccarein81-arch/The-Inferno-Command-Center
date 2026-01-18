@@ -38,4 +38,30 @@ async function loadIntelligence() {
     } catch (e) {
         console.error("Firebase read failed:", e);
     }
+import { ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// --- LEADERSHIP NOTEBOOK: SAVE FEATURE ---
+window.saveRecruitNote = async function() {
+    const id = document.getElementById('recruit-id').value.trim();
+    const note = document.getElementById('recruit-note-input').value.trim();
+    const commander = document.getElementById('display-name').innerText;
+
+    if (!id || !note) return;
+
+    try {
+        // Save note under the player's ID in Firebase
+        await set(ref(db, 'recruitment/' + id), {
+            target_id: id,
+            note: note,
+            logged_by: commander,
+            timestamp: new Date().toLocaleString()
+        });
+        
+        alert("Tactical note saved to Inferno HQ.");
+        document.getElementById('recruit-note-input').value = '';
+    } catch (e) {
+        console.error("Database write failed:", e);
+    }
+};
+    
 }
