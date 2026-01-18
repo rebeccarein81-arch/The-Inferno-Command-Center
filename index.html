@@ -47,10 +47,26 @@
                     <div class="card-value">+1.2M</div>
                     <div style="color:#00ff00; font-size:0.8rem; margin-top: 5px;">▲ 14% VS LAST WEEK</div>
                 </div>
+
                 <div class="glass-card">
-                    <div class="card-label">Goal Progress</div>
+                    <div class="card-label">Faction Rank</div>
+                    <div class="card-value">#04</div>
+                    <div style="color: #888; font-size: 0.8rem; margin-top: 5px;">TOP GAINER STATUS</div>
+                </div>
+
+                <div class="glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="card-label">Goal: <span id="goal-target-display">1M</span></div>
+                        <button onclick="toggleGoalInput()" style="background:none; border:none; color:#ff4500; cursor:pointer; font-size:0.7rem; font-weight:bold;">[SET GOAL]</button>
+                    </div>
                     <div class="card-value" id="goal-percent">0%</div>
+                    <div id="motivation-text" style="color: #666; font-size: 0.7rem; font-style: italic; margin-bottom: 8px;">Target locked.</div>
                     <div class="progress-bg"><div id="goal-progress-fill" class="progress-fill"></div></div>
+
+                    <div id="goal-input-area" style="display:none; margin-top:15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                        <input type="text" id="new-goal-val" placeholder="Ex: 500000000" style="background:#000; border:1px solid #333; color:white; padding:8px; width:65%; border-radius:5px;">
+                        <button onclick="saveGoal()" style="background:#ff4500; border:none; color:white; padding:8px 12px; cursor:pointer; border-radius:5px; font-weight:bold;">SAVE</button>
+                    </div>
                 </div>
             </div>
 
@@ -79,7 +95,7 @@
 
             <div id="recruit-view" style="display: none;">
                 <div class="glass-card">
-                    <h3 class="card-label">External Scout</h3>
+                    <h3 class="card-label">Recruitment Scout</h3>
                     <div style="margin: 20px 0; display: flex; gap: 10px;">
                         <input type="text" id="recruit-id" placeholder="Player ID" style="background:#000; border:1px solid #333; color:white; padding:10px; flex:1;">
                         <button onclick="scoutPlayer()" style="background:#ff4500; color:white; border:none; padding:10px 20px; cursor:pointer;">SCOUT</button>
@@ -93,6 +109,7 @@
                     <div class="card-label">Live Chain Watcher</div>
                     <div class="card-value" id="chain-count">0</div>
                     <div id="chain-timer" style="color: #ff4500; font-family: 'Orbitron'; font-size: 1.5rem;">0:00</div>
+                    <div class="progress-bg"><div id="chain-bar" class="progress-fill"></div></div>
                 </div>
             </div>
         </main>
